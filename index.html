@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web_map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+   
+    <link rel="stylesheet" href="style.css">
+
+    
+</head>
+<body>
+    <div class="container"> 
+        <div class="header-section">
+            <img id="img-head" src="https://th.bing.com/th/id/R.72b0cd32c0c416287beea448539f90b1?rik=dUyXvf%2bFRByjIA&riu=http%3a%2f%2fwww.pa-sport.fr%2fwp-content%2fuploads%2fExpo-SPORTS-EN-JEU-au-Musee-dArt-et-dIndustrie-de-Saint-Etienne.png&ehk=YBphXI9VMhTnNThmUkrTEzCbLGIiITzS1uoZHKyFfP0%3d&risl=&pid=ImgRaw&r=0" alt="">
+            <h2>Carte des équipements sportifs</h2> 
+        </div>
+        <div class="map-section">
+
+            <div class="info">
+                <p id="dateDisplay" class="Display-date">Curseur temporelle</p>
+                <p id="Filtre-actu">Filtre actuelle </p>
+                <p id="Nb_equip"> Nombre d'equipement</p>
+            </div>
+
+            <div class="map-container">
+                <div class="icon-nav" id="icon-nav">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+                <!-- ========= Boutton nav ======= -->
+                <div class=" nav-bar">
+                    <button class="nav-button" id="date-switch"> <img src="docs/img/Temps.svg" alt="" > </button>
+                    <button class="nav-button" id="list-switch"> <img src="docs/img/Liste.svg" alt="" > </button>
+                    <button class="nav-button" id="filtre-switch"> <img src="docs/img/Filtre.svg" alt="" > </button>
+                    <button class="nav-button" id="legende-switch"> <img src="docs/img/Couche.svg" alt="" > </button>
+                    <button class="nav-button" id="desc-switch"> D</button>
+                    <button class="nav-button" id="fulldesc-switch"> D2</button>
+                </div>
+                <!-- ========== Date ========== -->
+                <dialog id="view-date" class="body-dialog" >
+                    <div id="head-dialog" class="head-dialog">
+                        <button id="dev-date" class="dev-button">_</button>
+                        <button id="close-date" class="close-button"> x</button>
+                    </div>
+                    <p id="dateDisplay2">Curseur temporelle</p>
+                    <div id="curseur"> 
+                        <input type="range" id="date-slider" min="1900" max="2023" value="2023" oninput="updateDateDisplay(this.value)">
+                    </div>
+                    <div open id="play-date" class="content-dialog"> 
+                        <img class="img_date" id="chrono" src="docs/img/Capture d'écran 2024-05-19 121237.png" alt="">
+                        <div id="bas_date">
+                            <p id="date1">1900</p>
+                            <div>
+                                <button id="resetButton"><<</button>
+                                <button id="recul"><</button>
+                                <button id="startButton">☐</button>
+                                <button id="avance">></button>
+                                <button id="fin">>></button>
+                            </div>
+                            <p id="date2">2024</p>
+                        </div>
+                    </div>
+                    
+                </dialog>
+                <!-- ========== liste ========= -->
+                <dialog id="view-list" class="body-dialog">
+                    <div class="head-dialog">
+                        <button id="dev-list" class="dev-button">_</button>
+                        <button id="close-list" class="close-button"> x</button>
+                    </div>
+                    <h4> Liste des équipements</h4>
+                    <div class="content-dialog" id="liste-content">
+                        <ul class="list", id="list-equipement"></ul> 
+                    </div>
+                </dialog>
+                <!-- ========== Filtre ========= -->
+                <dialog id="view-filtre" class="body-dialog"> 
+                    <div class="head-dialog">
+                        <button id="close-filtre" class="close-button"> x</button>
+                    </div>
+                    <div class="list-box" class="content-dialog">
+                        <div class="content-dialog">
+                            <h4> Filtre des équipements</h4>
+                            <ul class="list", id="list-filtre">
+                            </ul>
+                        </div>
+                    </div>
+                </dialog>
+                <!-- ========== Couche ========= -->
+                <dialog id="view-couche" class="body-dialog"> 
+                    <div class="head-dialog">
+                        <button id="close-couche" class="close-button"> x</button>
+                    </div>
+                    <div class="content-dialog">
+                        <h4> Couche</h4>
+                        <ul class="list", id="list-filtre">
+                            <li>Quatier</li>
+                            <li>Forme</li>
+                            <li>Point
+                                <ul class="class_couche">
+                                    <li><img class="img_couche" src="docs/img/Exterieur.svg" alt="Image 1"> Sport en plein aire </li>
+                                    <li><img class="img_couche" src="docs/img/Gymnase.svg" alt="Image 2"> Equipement couvert</li>
+                                    <li><img class="img_couche" src="docs/img/Piscine.svg" alt="Image 3"> Sport aquatique</li>
+                                    <li><img class="img_couche" src="docs/img/Boule.svg" alt="Image 4"> Jeux de boule</li>
+                                    <li><img class="img_couche" src="docs/img/Divers.svg" alt="Image 5"> Divers</li>
+                                </ul>
+                            </li>
+                        </ul> 
+                    </div>
+
+                </dialog>
+                <!-- =========== Résumer description ========= -->
+                <dialog id="view_description" class="body-dialog"> 
+                    <div class="head-dialog">
+                        <button id="dev-descrition" class="dev-button">_</button>
+                        <button id="close-descrition" class="close-button"> x</button>
+                    </div>
+                    <div id="content-desc" class="content-dialog">
+                        <div id="img-description" class="img">
+                            <a id="lien_img0" href="" target="_blank">
+                                <img class="img_desc" id="id_img0" src="" alt="">
+                            </a>
+                        </div>
+                        <h2 id="titre-description"> Parc</h2>
+                        <p id="texte-description"> Descriptif </p>
+                        
+                    </div>
+
+                </dialog>
+                <!-- ====== Full description =========== -->
+                <dialog id="full-description" class="body-dialog">
+                    <div class="head-dialog">
+                        <button id="reduit-descrition" class="dev-button">_</button>
+                        <button id="close-desc2" class="close-button"> x</button>
+                    </div>
+                    <div class="content-dialog">
+                        <div id="fulldesc_rightbox">
+                            <div id="image_full">
+
+                                <a id="lien_img1" href="" target="_blank">
+                                    <img class="img_full" id="id_img1" src="" alt="">
+                                </a>
+                                <a id="lien_img2" href="" target="_blank">
+                                    <img class="img_full" id="id_img2" src="" alt="">
+                                </a>
+                                <a id="lien_img3" href="" target="_blank">
+                                    <img class="img_full" id="id_img3" src="" alt="">
+                                </a>
+                                <a id="lien_img4" href="" target="_blank">
+                                    <img class="img_full" id="id_img4" src="" alt="">
+                                </a>
+                            </div>
+                            <div id="evenement">
+                                <h3> Evenement</h3>
+                                <p id="docs_event"> texte </p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h2 id="titre"> Parc</h2>
+                            <p id="addresse"> Adresse</p>
+                        </div>
+
+                        <!-- ===== Partie description ===== -->
+                        <h3> Notice historique</h3>
+                        <div id="description"> Descriptif </div>
+                        <!-- ====== Partie Cotes ====== -->
+                        <h3>Docs des archives</h3>
+                        <div id="event2">
+                            
+                        </div>
+                        <div id="archive">
+                            <h4>Document ecrit:</h4> 
+                            <p id="docs_ecrit"> ecrit</p>
+                            <h4>Document iconographique:</h4> 
+                            <p id="docs_icono"> image</p>
+                            <h4>Plan:</h4> 
+                            <p id="docs_plan"> plan</p>
+                        </div> 
+                    </div>
+                               
+                </dialog>
+                
+                <div id="map"></div>
+
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- ===== Appelle des fichiers et des js ========= -->
+   
+    <script src="docs/Ensemble.js"></script>
+    <script src="docs/Equipement.js"></script>
+    <script src="docs/Cotes.js"></script>
+    <script src="docs/image.js"></script>
+    <script src="docs/fond_carte/Forme.js"></script>
+    <script src="docs/fond_carte/Quartier.js"></script>
+    <script src="/index_data.js"></script>
+    <script src="/index.js"></script>
+    
+    
+ 
+    
+    
+</body>
+</html>
