@@ -77,8 +77,6 @@ body{
 
 }
 
-
-
 .icon-nav:hover{
     background-color: rgba(81, 150, 3);
 }
@@ -112,6 +110,14 @@ body{
     height: 100%; 
     width: 100%;
     border-radius: 5px;
+}
+
+#desc-switch {
+    display: none;
+}
+
+#fulldesc-switch{
+    display: none;
 }
 
 /* ======= Esthétique générale ===== */
@@ -436,6 +442,17 @@ li:hover{
     display: block;
 } */
 
+/* ===================== A propos ==================== */
+
+#apropos{
+    position: absolute;
+    height: 92%;
+    width: 40%;
+    margin-top: 60px;
+    margin-right: 5px;
+    
+}
+
 /* ========== Tout ce qui se qui part de 400 a 900 les pixel max mode reduit de la carte ========== */
 
 @media screen and (max-width: 950px) {
@@ -574,9 +591,17 @@ li:hover{
         padding: 2px;
         background: rgba(143, 176, 236, 0.582);
         padding-top: 0;
-        width: 80%;
+        width: 65%;
         justify-content: center;
         margin-left: 15%;
+    }
+
+    .info p {
+        font-size: 15px;
+    }
+
+    #apropos p {
+        font-size: 12px;
     }
 
     #view-date {

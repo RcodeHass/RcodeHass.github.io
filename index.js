@@ -17,21 +17,14 @@ const init = () => {
     });
     cartho.addTo(map);
 
-    var Stadia_AlidadeSmoothDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}', {
-        minZoom: 0,
-        maxZoom: 20,
-        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        ext: 'png'
-    });
-    Stadia_AlidadeSmoothDark.addTo(map);
 
-    var Stadia_AlidadeSatellite = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}', {
+    var OpenStreetMap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         minZoom: 0,
         maxZoom: 20,
-        attribution: '&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        attribution: '© OpenStreetMap contributors, Tiles style by Humanitarian OpenStreetMap Team hosted by OpenStreetMap France',
         ext: 'jpg'
     });
-    Stadia_AlidadeSatellite.addTo(map); 
+    OpenStreetMap.addTo(map); 
 
     // Définir un objet de correspondance pour les icônes
     const iconMapping = {
@@ -47,6 +40,9 @@ const init = () => {
         return iconMapping[domaine] || iconMapping["Divers"];
     };
 
+    // Créez des groupes pour les marqueurs et les formes
+    const markerGroup = L.layerGroup().addTo(map);
+    const shapeGroup = L.layerGroup();
 
     // ======= Ajout de la couche de Point =========
 
@@ -61,7 +57,8 @@ const init = () => {
             
         });
 
-        const marker = L.marker([latitude, longitude], {icon:icone}).addTo(map).bindPopup(pratique);
+        const marker = L.marker([latitude, longitude], { icon: icone }).bindPopup(pratique);
+        markerGroup.addLayer(marker);
 
         marker.on('click', function () {
             const ensemble = Data.Ensembles.find(ens => ens.id === id);
@@ -147,46 +144,25 @@ const init = () => {
             color: '#3333ff',
             lineOpacity: 0.1,
             opacity: 0.1
-        }).addTo(map);
+        });
+        shapeGroup.addLayer(shape);
         return shape;
     };
     
 
-     // Controle des fond de carte 
+    // Controle des fond de carte 
      var baseLayers = {
-        "Cartho":cartho,
-        "Satellite": Stadia_AlidadeSatellite,
-        "Stadia Dark": Stadia_AlidadeSmoothDark
+        "OpenSteetMap": OpenStreetMap,
+        "Cartho":cartho
+        
     };
-    // Les couche 
+
+    // Ajouter les couche dans l'overview
     var overlays = {
-        // "Marker": marker,
-        // "Forme": shape
+        "Marker": markerGroup,
+        "Forme": shapeGroup
     };
-    L.control.layers(baseLayers, overlays).addTo(map);
-
-    // Ajoutez vos marqueurs à la carte
-    // Data.Equipements.forEach(equip => {
-    //     addMarkerToMap({
-    //         latitude: equip.latitude,
-    //         longitude: equip.longitude,
-    //         pratique: equip.pratique,
-    //         domaine: equip.domaine,
-    //         id: equip.id_equip
-    //     }, map);
-    // });
-
-    // fronction qui zoum sur l'ensemble d'équipement 
-    // listLoc.addEventListener('click', ({ target }) => {
-    //     if (target.nodeName !== 'LI') {
-    //         return;
-    //     }
-    //     const lat = Number(target.dataset.lat);
-    //     const lon = Number(target.dataset.lon);
-    //     if (!isNaN(lat) && !isNaN(lon)) {
-    //         map.flyTo([lat, lon], 17);
-    //     }
-    // });
+    L.control.layers(baseLayers, overlays,).addTo(map);
 
     // Ajouter l'écouteur d'événement sur l'élément parent
     listLoc.addEventListener('click', (event) => {
@@ -199,7 +175,6 @@ const init = () => {
             if (ulEquip) {
                 ulEquip.classList.toggle('hidden');
             }
-
             // Récupérez les coordonnées pour le zoom sur la carte
             const lat = Number(target.dataset.lat);
             const lon = Number(target.dataset.lon);
@@ -222,6 +197,24 @@ const init = () => {
     `;
     document.head.appendChild(style);
 
+    // ======= Liste Filtrage par domaine ========
+    let listEl2 = document.querySelector('ul#list-filtre');
+    const frag2 = document.createDocumentFragment();
+
+    const equipment = new Set();
+    Data.Equipements.forEach ((location2) => {
+        if (!equipment.has(location2.domaine)){
+            const liEl2 = document.createElement('li');
+            liEl2.innerText = location2.domaine;
+            liEl2.dataset.lat = location.lat;
+            liEl2.dataset.lon = location.lon;
+            frag2.appendChild(liEl2);
+            equipment.add(location2.domaine);
+        }
+    });
+
+    listEl2.appendChild(frag2)
+
 
     // ======== Fonction de filtrage en fonction du champs domaine ===========
     // Point
@@ -235,7 +228,7 @@ const init = () => {
     // Shape
     function updateFilterByShape(shape) {
         const filteredShapes = Data.Formes.filter((form) => form.domaine === shape);
-        currentFilteredShapes = filteredShapes; // Met à jour les équipements filtrés actuels
+        currentFilteredShapes = filteredShapes;
         updateFilterByDate(currentFilteredEquipments, filteredShapes);
     }
 
@@ -249,7 +242,6 @@ const init = () => {
         }
     }
     
-
     // Crée un liste des domaine et filter les marher et les forme
     let currentEquipment = null;
     let currentShape = null;
@@ -280,7 +272,6 @@ const init = () => {
         const shape = target.innerHTML.trim();
 
         if (shape === currentShape) {
-            // Si la forme sélectionnée est la même que la forme actuelle, réinitialiser la sélection
             currentFilteredShapes = Data.Formes; // Réinitialiser les équipements filtrés
             updateFilterByDate(currentFilteredShapes, currentFilteredShapes); // Afficher tous les équipements
             currentShape = null; // Réinitialiser currentShape à null
@@ -288,9 +279,10 @@ const init = () => {
             // Sinon, filtrer et afficher les équipements en fonction de la forme sélectionnée
             updateFilterByShape(shape);
             currentShape = shape; // Mettre à jour currentShape avec la nouvelle forme sélectionnée
-        }
+        } 
     });
 
+    
     // ===== Fonction pour filtrer et afficher les équipements en fonction de la date ====
     function updateFilterAndDisplay() {
         const curseurValeur = document.getElementById('date-slider').value;
