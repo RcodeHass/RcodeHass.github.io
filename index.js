@@ -2,8 +2,6 @@
 
 const init = () => {
 
-
-
     // =====================================================================
     // ==============       Initialisation de la carte     =================
     // =====================================================================
@@ -32,7 +30,6 @@ const init = () => {
     });
     OpenStreetMap.addTo(map); 
 
-    
 
     // Créez des groupes pour les marqueurs
     const markerGroup = L.layerGroup().addTo(map);
@@ -135,93 +132,6 @@ const init = () => {
     // =================         Création des list        ==================
     // =====================================================================
 
-    // Création de la liste d'équipements
-    Data.Complexe.forEach((loca) => {
-        const liEl = document.createElement('li');
-        liEl.innerHTML = loca.name;
-        liEl.dataset.lat = loca.lat;
-        liEl.dataset.lon = loca.lon;
-    
-        // Créer une sous-liste pour les équipements
-        const ulEquip = document.createElement('ul');
-        ulEquip.classList.add('sub-list', 'hidden');
-    
-        // Ajouter les équipements à la sous-liste
-        if (ensembleEquipements[loca.id]) {
-            ensembleEquipements[loca.id].forEach((equip) => {
-                const liEquip = document.createElement('li');
-                liEquip.classList.add('equip-item');
-    
-                // Créer l'élément d'image
-                const imgEl = document.createElement('img');
-                imgEl.src = getIconUrl(equip.domaine); // Utilisation de la fonction getIconUrl
-                imgEl.alt = equip.pratique;
-                imgEl.style.width = '20px';
-                imgEl.style.height = '20px';
-    
-                // Créer l'élément de texte
-                const textEl = document.createElement('span');
-                textEl.innerText = equip.pratique;
-    
-                // Ajouter l'image et le texte au li
-                liEquip.appendChild(imgEl);
-                liEquip.appendChild(textEl);
-                ulEquip.appendChild(liEquip);
-    
-                // Ajouter les données pratiques au liEquip pour utilisation ultérieure
-                liEquip.dataset.lat = equip.latitude;
-                liEquip.dataset.lon = equip.longitude;
-                liEquip.dataset.pratique = equip.pratique;
-            });
-        }
-    
-        liEl.appendChild(ulEquip);
-        frag.appendChild(liEl);
-    });
-    
-    listLoc.appendChild(frag);
-    
-
-    // Ajouter l'écouteur d'événement sur l'élément parent pour afficher ou masquer les pratiques 
-    listLoc.addEventListener('click', (event) => {
-        const target = event.target;
-        
-        // Vérifiez si l'élément cliqué est un élément de la liste principale
-        if (target.nodeName === 'LI' && target.parentElement === listLoc) {
-            // Bascule l'affichage de la sous-liste
-            const ulEquip = target.querySelector('ul.sub-list');
-            if (ulEquip) {
-                ulEquip.classList.toggle('hidden');
-            }
-            // Récupérez les coordonnées pour le zoom sur la carte
-            const lat = Number(target.dataset.lat);
-            const lon = Number(target.dataset.lon);
-            if (!isNaN(lat) && !isNaN(lon)) {
-                map.flyTo([lat, lon], 17);
-            }
-        }
-    });
-
-    // Ajouter l'écouteur d'événement pour afficher le popup des éléments de la sous-liste
-    listLoc.addEventListener('click', (event) => {
-        const target = event.target;
-
-        // Vérifiez si l'élément cliqué est un élément de la sous-liste
-        if (target.closest('.equip-item')) {
-            const liEquip = target.closest('.equip-item');
-            const lat = liEquip.dataset.lat;
-            const lon = liEquip.dataset.lon;
-            const pratique = liEquip.dataset.pratique;
-
-            if (!isNaN(lat) && !isNaN(lon)) {
-                L.popup()
-                    .setLatLng([lat, lon])
-                    .setContent(`<strong>Pratique:</strong> ${pratique}`)
-                    .openOn(map);
-            }
-        }
-    });
-
     // Liste Filtrage 1 par domaine
     let listEl2 = document.querySelector('ul#list-filtre');
     const frag2 = document.createDocumentFragment();
@@ -303,12 +213,12 @@ const init = () => {
             const passesTypeFilter = checkedTypes.length === 0 || checkedTypes.includes(equip.type);
             const passesDateFilter = new Date(equip.dateD) <= dateCurseur && new Date(equip.dateF) >= dateCurseur;
             const passesMasqueFilter = !isMasqueSwitchChecked || equip.p_cotes;
-
             return passesEquipmentFilter && passesTypeFilter && passesDateFilter && passesMasqueFilter;
         });
 
         currentFilteredEquipments = filteredEquipments;
         updateMap(filteredEquipments);
+        updateEquipmentList(filteredEquipments); // Mettre à jour la liste d'équipements
 
         // Collecter les domaines des équipements filtrés
         let filteredDomains = filteredEquipments.map(equip => equip.domaine);
@@ -359,6 +269,63 @@ const init = () => {
         } else {
             filterDisplay.innerHTML = 'Filtre actuel: Aucun';
         }
+    }
+
+    // =====================================================================
+    // ==============   Création et mise à jour de la liste  ===============
+    // =====================================================================
+
+    function updateEquipmentList(filteredEquipments) {
+        listLoc.innerHTML = ''; // Vider la liste actuelle
+    
+        const frag = document.createDocumentFragment();
+    
+        Data.Complexe.forEach((loca) => {
+            const relevantEquipments = ensembleEquipements[loca.id]?.filter(equip => filteredEquipments.includes(equip)) || [];
+            
+            if (relevantEquipments.length > 0) {
+                const liEl = document.createElement('li');
+                liEl.innerHTML = loca.name;
+                liEl.dataset.lat = loca.lat;
+                liEl.dataset.lon = loca.lon;
+    
+                // Créer une sous-liste pour les équipements
+                const ulEquip = document.createElement('ul');
+                ulEquip.classList.add('sub-list', 'hidden');
+    
+                // Ajouter les équipements à la sous-liste
+                relevantEquipments.forEach((equip) => {
+                    const liEquip = document.createElement('li');
+                    liEquip.classList.add('equip-item');
+    
+                    // Créer l'élément d'image
+                    const imgEl = document.createElement('img');
+                    imgEl.src = getIconUrl(equip.domaine); // Utilisation de la fonction getIconUrl
+                    imgEl.alt = equip.pratique;
+                    imgEl.style.width = '20px';
+                    imgEl.style.height = '20px';
+    
+                    // Créer l'élément de texte
+                    const textEl = document.createElement('span');
+                    textEl.innerText = equip.pratique;
+    
+                    // Ajouter l'image et le texte au li
+                    liEquip.appendChild(imgEl);
+                    liEquip.appendChild(textEl);
+                    ulEquip.appendChild(liEquip);
+    
+                    // Ajouter les données pratiques au liEquip pour utilisation ultérieure
+                    liEquip.dataset.lat = equip.latitude;
+                    liEquip.dataset.lon = equip.longitude;
+                    liEquip.dataset.pratique = equip.pratique;
+                });
+    
+                liEl.appendChild(ulEquip);
+                frag.appendChild(liEl);
+            }
+        });
+    
+        listLoc.appendChild(frag);
     }
 
     // Initialisation du filtre par date
@@ -436,7 +403,6 @@ const init = () => {
                 if (newValue > 2023) {
                     newValue = 1900; // Réinitialisez à 1900 si on dépasse 2023
                 }
-
                 document.getElementById('date-slider').value = newValue;
                 updateFilterAndDisplay();
             }, 200);
@@ -457,8 +423,52 @@ const init = () => {
     });
 
     // Applique les filtres initialement
-    let currentFilteredEquipments = Data.Equipements;
+    // let currentFilteredEquipments = Data.Equipements;
     applyFilters();
+
+    // =====================================================================
+    // ======    Gestion des événements sur la liste d'équipement    =======
+    // =====================================================================
+
+    // Gestion de l'affichage des sous-listes et zoom sur la carte
+    listLoc.addEventListener('click', (event) => {
+        const target = event.target.closest('li');
+
+        if (!target) return;
+
+        // Vérifiez si l'élément cliqué est un élément de la liste principale
+        if (target.parentElement === listLoc) {
+            // Bascule l'affichage de la sous-liste
+            const ulEquip = target.querySelector('ul.sub-list');
+            if (ulEquip) {
+                ulEquip.classList.toggle('hidden');
+            }
+            // Récupérez les coordonnées pour le zoom sur la carte
+            const lat = Number(target.dataset.lat);
+            const lon = Number(target.dataset.lon);
+            if (!isNaN(lat) && !isNaN(lon)) {
+                map.flyTo([lat, lon], 17);
+            }
+        }
+    });
+
+    // Ajouter l'écouteur d'événement pour afficher le popup des éléments de la sous-liste
+    listLoc.addEventListener('click', (event) => {
+        const target = event.target.closest('.equip-item');
+
+        if (target) {
+            const lat = target.dataset.lat;
+            const lon = target.dataset.lon;
+            const pratique = target.dataset.pratique;
+
+            if (!isNaN(lat) && !isNaN(lon)) {
+                L.popup()
+                    .setLatLng([lat, lon])
+                    .setContent(`<strong>Pratique:</strong> ${pratique}`)
+                    .openOn(map);
+            }
+        }
+    });
 
     
     

@@ -239,6 +239,7 @@ input:checked + .slider:before {
     flex-wrap: wrap;
     position: relative;
     padding: 5px;
+    overflow-x: hidden;
 }
 
 

@@ -74,7 +74,6 @@ const Data = {
             event: element.EVENEMENT,
             description: element.DESCRIPTION,
             adresse: element.ADRESSE,
-            
         };
     }),
     
