@@ -21,6 +21,11 @@
         <div class="header-section">
             <img id="img-head" src="https://th.bing.com/th/id/R.72b0cd32c0c416287beea448539f90b1?rik=dUyXvf%2bFRByjIA&riu=http%3a%2f%2fwww.pa-sport.fr%2fwp-content%2fuploads%2fExpo-SPORTS-EN-JEU-au-Musee-dArt-et-dIndustrie-de-Saint-Etienne.png&ehk=YBphXI9VMhTnNThmUkrTEzCbLGIiITzS1uoZHKyFfP0%3d&risl=&pid=ImgRaw&r=0" alt="">
             <h2>Carte des équipements sportifs</h2> 
+            <!-- <label class="switch" id="masque-switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label> -->
+
         </div>
         <div class="map-section">
 
@@ -30,7 +35,7 @@
                 <p id="Nb_equip"> Nombre d'equipement</p>
             </div>
 
-            <div class="map-container">
+           <div class="map-container">
                 <div class="icon-nav" id="icon-nav">
                     <i class="fa-solid fa-bars"></i>
                 </div>
@@ -38,13 +43,20 @@
                 <div class=" nav-bar">
                     <button class="nav-button" id="date-switch"> <img src="docs/img/Temps.svg" alt="" > </button>
                     <button class="nav-button" id="list-switch"> <img src="docs/img/Liste.svg" alt="" > </button>
-                    <button class="nav-button" id="filtre-switch"> <img src="docs/img/Filtre.svg" alt="" > </button>
-                    <button class="nav-button" id="legende-switch"> <img src="docs/img/Couche.svg" alt="" > </button>
+                    <button class="nav-button" id="filtre-switch"> <img src="docs/img/Filtre.svg" alt=""> </button>
+                    <button class="nav-button" id="legende-switch"> L </button>
                     <button class="nav-button" id="desc-switch"> D</button>
                     <button class="nav-button" id="fulldesc-switch"> D2</button>
-                    <button class="nav-button" id="apropos-switch"> !</button>
+                    <button class="nav-button" id="apropos-switch"> <img src="docs/img/Apropos.svg" alt="" > </button>
                 </div>
                 <!-- ========== Date ========== -->
+                <script>
+                    // Fonction pour mettre à jour l'affichage de la valeur du curseur
+                    function updateDateDisplay(value) {
+                        document.getElementById('dateDisplay').innerText = value;
+                        document.getElementById('dateDisplay2').innerText = value;
+                    }
+                </script>
                 <dialog id="view-date" class="body-dialog" >
                     <div id="head-dialog" class="head-dialog">
                         <button id="dev-date" class="dev-button">_</button>
@@ -60,9 +72,9 @@
                             <p id="date1">1900</p>
                             <div>
                                 <button id="resetButton"><<</button>
-                                <button id="recul"><</button>
+                                <!-- <button id="recul"><</button> -->
                                 <button id="startButton">☐</button>
-                                <button id="avance">></button>
+                                <!-- <button id="avance">></button> -->
                                 <button id="fin">>></button>
                             </div>
                             <p id="date2">2024</p>
@@ -82,14 +94,27 @@
                     </div>
                 </dialog>
                 <!-- ========== Filtre ========= -->
-                <dialog id="view-filtre" class="body-dialog"> 
+                <dialog id="view-filtre" class="body-dialog" open> 
                     <div class="head-dialog">
                         <button id="close-filtre" class="close-button"> x</button>
                     </div>
                     <div class="list-box" class="content-dialog">
                         <div class="content-dialog">
+                            
+                            <div>
+                                <h4> Masquer les equipements <br>non cotés </h4>
+                                <label class="switch" id="masque-switch">
+                                    <input type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            
                             <h4> Filtre des équipements</h4>
-                            <ul class="list", id="list-filtre">
+                            <ul class="list"  id="list-filtre">
+                            </ul>
+                            <h4> Filtre secondaire</h4>
+                            <ul class="list" id="second-filtre" >
+
                             </ul>
                         </div>
                     </div>
@@ -189,7 +214,7 @@
                                
                 </dialog>
                 <!-- ====== Full description =========== -->
-                <dialog id="apropos" class="body-dialog">
+                <dialog id="view-apropos" class="body-dialog">
                     <div class="head-dialog">
                         <button id="close-apropos" class="close-button"> x</button>
                     </div>
@@ -216,6 +241,7 @@
     <script src="docs/Cotes.js"></script>
     <script src="docs/image.js"></script>
     <script src="docs/fond_carte/Forme.js"></script>
+    <script src="docs/fond_carte/Fichier_export.js"></script>
     <script src="docs/fond_carte/Quartier.js"></script>
     <script src="/index_data.js"></script>
     <script src="/index.js"></script>

@@ -13,6 +13,7 @@ body{
     /* font-family: "Poppins", sans-serif; */
 }
 
+
 .container {
     position: relative;
     display: flex;
@@ -34,6 +35,56 @@ body{
     margin: 5px;
     height: 100%;
     border-radius: 40px;
+}
+
+/* ===== Switch ====== */
+.switch {
+    position: relative;
+    width: 15%;
+    height: 8%;
+    padding-left: 6%;
+    margin-left: 2%;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .2s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 66%;
+    width: 38%;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(100%);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 100%;
 }
 
 .map-section{
@@ -103,7 +154,6 @@ body{
     height: fit-content;
     flex-grow: 1;
     height: 100%;
-
 }
 
 #map { 
@@ -117,6 +167,10 @@ body{
 }
 
 #fulldesc-switch{
+    display: none;
+}
+
+#legende-switch{
     display: none;
 }
 
@@ -272,7 +326,8 @@ li:hover{
 }
 
 #curseur{
-    padding: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 #date-slider{
@@ -367,6 +422,16 @@ li:hover{
     height: auto;
     margin-left: calc(0vh + 7vh);
 }
+#list-filtre{
+    width: auto;
+    height: auto;
+}
+
+#second-filtre {
+    width: 96%;
+    height: 150px;
+    overflow-y: scroll;
+}
 
 
 
@@ -385,12 +450,6 @@ li:hover{
     object-position: center;
 }
 
-#list-filtre{
-    width: auto;
-    height: auto;
-}
-
-
 
 .img_couche {
     height: 30px;
@@ -399,9 +458,9 @@ li:hover{
 /* ========== full description ========== */
 #full-description{
     position: absolute;
-    height: 98%;
+    height: 90%;
     width: 80%;
-    margin-top: 10px;
+    margin-top: 65px;
 
 }
 
@@ -438,16 +497,13 @@ li:hover{
     margin-bottom: 0;
 }
 
-/* #archive{
-    display: block;
-} */
 
 /* ===================== A propos ==================== */
 
-#apropos{
+#view-apropos{
     position: absolute;
     height: 92%;
-    width: 40%;
+    width: 30%;
     margin-top: 60px;
     margin-right: 5px;
     
@@ -481,6 +537,18 @@ li:hover{
         background: rgba(143, 176, 236, 0.582);
         padding-top: 0;
         border-radius: 5px;
+    }
+
+    .info p {
+        font-size: 80%;
+    }
+
+    .switch {
+        position: relative;
+        width: 15%;
+        height: 8%;
+        padding-left: 8%;
+        margin-left: 2%;
     }
     
 
@@ -525,9 +593,33 @@ li:hover{
         object-position: center;
         padding: 0px;
     }
+
+    #play-date{
+        display: none;
+    }
+
+    #full-description{
+        position: absolute;
+        height: 98%;
+        width: 85%;
+        margin-top: 60px;
+    
+    }
 }
 /* ========== Tout ce qui se qui part de 0 a les pixel max d'un telephone ========== */
-@media screen and (max-width : 412px) {
+@media screen and (max-width : 430px) {
+
+
+    .header-section {
+        display: flex;
+        align-items: center;
+        background-color: rgba(113, 179, 13, 0.87);
+        height: 4vh;
+        padding: 5px;
+        display: block;
+    
+    }
+
 
     html, body {
         height: 100%;
@@ -535,6 +627,11 @@ li:hover{
         margin: 0;
     
     }
+
+    .leaflet-control-layers {
+        z-index: 9999;
+    }
+    
 
     #view-list{
         position: absolute;
@@ -573,11 +670,10 @@ li:hover{
 
     #full-description{
         position: absolute;
-        height: 50%;
-        width: 100%;
-        margin-top: 10px;
-        bottom: 0;
-    
+        height: 92%;
+        width: auto;
+        margin: 65px 5px 5px 5px ;
+
     }
 
     .info {
@@ -587,7 +683,7 @@ li:hover{
         display: flex;
         top: 10px;
         text-align: center;
-        z-index: 9999;
+        z-index: 500;
         padding: 2px;
         background: rgba(143, 176, 236, 0.582);
         padding-top: 0;
@@ -597,23 +693,34 @@ li:hover{
     }
 
     .info p {
-        font-size: 15px;
+        font-size: 20%;
     }
 
-    #apropos p {
+    #view-apropos p {
         font-size: 12px;
     }
 
     #view-date {
         align-items: center;
         position: absolute;
-        bottom: 22px;
+        bottom: 5px;
         width: 98%;
         height: auto;
         z-index: 9999;
         border: 1px solid #ccc;
         object-position: center;
         padding: 0px;
+    }
+
+    #resetButton  {
+        font-size: 50%;
+        margin-bottom: 5px;
+    }
+    #startButton{
+        font-size: 50%;
+    }
+    #fin {
+        font-size: 50%;
     }
 
     .nav-bar {
@@ -634,8 +741,8 @@ li:hover{
         border-radius: 5px;
         display: block;
         position: absolute;
-        width: 5vh;
-        height: 5vh;
+        width: 4vh;
+        height: 4vh;
         margin-left: 2%;
         margin-top: 15vh;
         z-index: 9999;
@@ -651,6 +758,14 @@ li:hover{
         width: 100%;
         height: auto;
         margin-bottom: 2px;
+    }
+
+    #view-apropos{
+        position: absolute;
+        height: 92%;
+        width: auto;
+        margin: 65px 5px 5px 5px ;
+        
     }
 
 

@@ -24,7 +24,7 @@ const dialogs = [
     document.getElementById('full-description'),
     document.getElementById('dev-descrition'),
     document.getElementById('reduit-descrition'),
-    document.getElementById('apropos')
+    document.getElementById('view-apropos')
 ];
 
 // Gerer les exceptions
@@ -44,19 +44,23 @@ document.getElementById('fulldesc-switch').addEventListener('click', () => toggl
 document.getElementById('dev-descrition').addEventListener('click', () => toggleDialog(dialogs, dialogs[5]));
 document.getElementById('reduit-descrition').addEventListener('click', () => toggleDialog(dialogs, dialogs[1]));
 document.getElementById('apropos-switch').addEventListener('click', () => toggleDialog(dialogs, dialogs[8]));
-// Fermer
-document.getElementById('close-date').addEventListener('click', () => dialogs[0].removeAttribute('open'));
-document.getElementById('close-descrition').addEventListener('click', () => dialogs[1].removeAttribute('open'));
-document.getElementById('close-list').addEventListener('click', () => dialogs[2].removeAttribute('open'));
-document.getElementById('close-filtre').addEventListener('click', () => dialogs[3].removeAttribute('open'));
-document.getElementById('close-couche').addEventListener('click', () => dialogs[4].removeAttribute('open'));
-document.getElementById('close-desc2').addEventListener('click', () => dialogs[5].removeAttribute('open'));
-document.getElementById('close-apropos').addEventListener('click', () => dialogs[8].removeAttribute('open'));
+// Fermer toutes les fenêtres
+const closeButtons = document.getElementsByClassName('close-button');
+
+Array.from(closeButtons).forEach(button => {
+    button.addEventListener('click', () => {
+        dialogs.forEach(dialog => {
+            if (dialog) {
+                dialog.removeAttribute('open');
+            }
+        });
+    });
+});
 
 // ========== Initialisation de la liste Ensemble Sportif ============
 
 const Data = {
-    Ensembles: Ensemble.map((element) => {
+    Complexe: Complexe.map((element) => {
         return {
             id: element.ID,
             name: element.NOM,
@@ -75,10 +79,12 @@ const Data = {
             latitude: element.lat_Y,
             longitude: element.lon_X,
             domaine: element.DOMAINE,
+            type: element.TYPE_EQUIP,
             pratique: element.PRATIQUE,
             dateD: new Date(element.DATE_INNAU),
             dateF: new Date(element.DATE_DEM),
             num_equip: element.NUM_EQUIP,
+            p_cotes: element.P_COTES
         };
     }),
     
@@ -109,39 +115,26 @@ const Data = {
     })
 };
 
-// ============== Les date =============
-// Définir une constante pour stocker la valeur du curseur
-const curseurValeur = document.getElementById('date-slider').value;
-// Affichage et paramétrage du fond de carte
-updateDateDisplay (curseurValeur);
-// Fonction pour mettre à jour l'affichage de la valeur du curseur
-function updateDateDisplay(value) {
-    document.getElementById('dateDisplay').innerText = value;
-    document.getElementById('dateDisplay2').innerText = value
-}
-
-const startButton = document.getElementById('startButton');
-const resetButton = document.getElementById('resetButton');
-// const dateDisplay = document.getElementById('dateDisplay');
-const dateDisplay = document.querySelectorAll('#dateDisplay, #dateDisplay2');
-let intervalId;
-
 // Pour convertir les saute de ligne de js a html
 const ConversionSautLine = (text) => {
     return text ? text.replace(/\\n\\n/g, '<br/><br/>') : 'Non disponible';
 };
 
+// Définir un objet de correspondance pour les icônes
+const iconMapping = {
+    "Sport en plein air": "docs/img/Exterieur.svg",
+    "Jeux de boule": "docs/img/Boule.svg",
+    "Sport aquatique": "docs/img/Piscine.svg",
+    "Equipement couvert": "docs/img/Gymnase.svg",
+    "Divers": "docs/img/Divers.svg" 
+};
 
-resetButton.addEventListener('click', () => {
-    document.getElementById('date-slider').value = 1900; // Réinitialisez la valeur du curseur à 0
-    updateDateDisplay(1900); // Mettez à jour l'affichage de la date avec la valeur réinitialisée
-});
+// Fonction pour obtenir l'URL de l'icône en fonction du domaine
+ const getIconUrl = (domaine) => {
+    return iconMapping[domaine] || iconMapping["Divers"];
+};
 
-fin.addEventListener('click', () => {
-    document.getElementById('date-slider').value = 2023; // Réinitialisez la valeur du curseur à 0
-    updateDateDisplay(2023); // Mettez à jour l'affichage de la date avec la valeur réinitialisée
-});
-
+// Les Dates 
 document.getElementById('dev-date').addEventListener('click', function() {
     const playDateDiv = document.getElementById('play-date');
     if (playDateDiv.style.display === 'none' || playDateDiv.style.display === '') {
@@ -150,6 +143,8 @@ document.getElementById('dev-date').addEventListener('click', function() {
         playDateDiv.style.display = 'none';
     }
 });
+
+document.getElementById('play-date').style.display = 'block';
 
 // Afficher la nav bar en mode smartphone 
 document.getElementById('icon-nav').addEventListener('click', function() {
@@ -161,22 +156,20 @@ document.getElementById('icon-nav').addEventListener('click', function() {
     }
 });
 
-// Initialisation de la fonction qui vas afficher ou masquer la seconde partie de date 
-document.getElementById('play-date').style.display = 'none';
-
 // // iniatilasation de la fonction qui affiche le nombre d'equipement 
 function updateNbEquipDisplay(count) {
     const nbEquipElement = document.getElementById('Nb_equip');
     if (nbEquipElement) {
         nbEquipElement.innerHTML = `Nb d'équipements: ${count}`;
     }
+   
 }
 
 //  ============== Liste les parc sportif ==============
 
 let listLoc = document.querySelector('ul#list-equipement');
 const frag = document.createDocumentFragment();
-// Créez un objet de correspondance entre les ensembles et leurs équipements
+// Créez un objet de correspondance entre les Complexe et leurs équipements
 const ensembleEquipements = Data.Equipements.reduce((acc, equip) => {
     if (!acc[equip.id_equip]) {
         acc[equip.id_equip] = [];
@@ -184,28 +177,52 @@ const ensembleEquipements = Data.Equipements.reduce((acc, equip) => {
     acc[equip.id_equip].push(equip);
     return acc;
 }, {});
-Data.Ensembles.forEach((loca) => {
+
+
+Data.Complexe.forEach((loca) => {
     const liEl = document.createElement('li');
     liEl.innerHTML = loca.name;
     liEl.dataset.lat = loca.lat;
     liEl.dataset.lon = loca.lon;
+
     // Créer une sous-liste pour les équipements
     const ulEquip = document.createElement('ul');
-    ulEquip.classList.add('sub-list','hidden'); 
+    ulEquip.classList.add('sub-list', 'hidden');
+
     // Ajouter les équipements à la sous-liste
     if (ensembleEquipements[loca.id]) {
         ensembleEquipements[loca.id].forEach((equip) => {
             const liEquip = document.createElement('li');
-            liEquip.innerHTML = equip.pratique;
             liEquip.classList.add('equip-item');
+
+            // Créer l'élément d'image
+            const imgEl = document.createElement('img');
+            imgEl.src = getIconUrl(equip.domaine); // Utilisation de la fonction getIconUrl
+            imgEl.alt = equip.pratique;
+            imgEl.style.width = '20px';
+            imgEl.style.height = '20px';
+
+            // Créer l'élément de texte
+            const textEl = document.createElement('span');
+            textEl.innerText = equip.pratique;
+
+            // Ajouter l'image et le texte au li
+            liEquip.appendChild(imgEl);
+            liEquip.appendChild(textEl);
             ulEquip.appendChild(liEquip);
+
+            // Ajouter les données pratiques au liEquip pour utilisation ultérieure
+            liEquip.dataset.lat = equip.latitude;
+            liEquip.dataset.lon = equip.longitude;
+            liEquip.dataset.pratique = equip.pratique;
         });
     }
+
     liEl.appendChild(ulEquip);
     frag.appendChild(liEl);
 });
 
-listLoc.append(frag);
+listLoc.appendChild(frag);
 
 // ============== Description ================
 const truncateText = (text, limit) => {
@@ -214,3 +231,22 @@ const truncateText = (text, limit) => {
     }
     return text;
 };
+
+// JavaScript pour vérifier la largeur de l'écran et afficher ou masquer le contenu des date 
+document.addEventListener('DOMContentLoaded', function() {
+    const playDateContent = document.getElementById('play-date');
+    const viewDateDialog = document.getElementById('view-date');
+    function adjustPlayDateVisibility() {
+        if (window.innerWidth < 950) {
+            // Masquer le contenu si l'écran est inférieur à 950 px
+            playDateContent.style.display = 'none';
+        } else {
+            playDateContent.style.display = 'block';
+        }
+    }
+    adjustPlayDateVisibility();
+    window.addEventListener('resize', adjustPlayDateVisibility);
+});
+
+
+

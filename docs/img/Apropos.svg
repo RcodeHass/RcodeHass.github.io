@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Calque_2" data-name="Calque 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 342.79 345.71">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        font-family: OCRAExtended, 'OCR A Extended';
+        font-size: 325.79px;
+      }
+
+      .cls-2 {
+        opacity: .63;
+        stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <g id="Icone">
+    <g id="Calque_15" data-name="Calque 15">
+      <g>
+        <circle class="cls-2" cx="171.39" cy="174.32" r="171.39" transform="translate(-73.06 172.25) rotate(-45)"/>
+        <text class="cls-1" transform="translate(59.02 268.61) scale(1.19 1)"><tspan x="0" y="0">i</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>

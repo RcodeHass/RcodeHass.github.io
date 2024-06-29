@@ -2,6 +2,12 @@
 
 const init = () => {
 
+
+
+    // =====================================================================
+    // ==============       Initialisation de la carte     =================
+    // =====================================================================
+
     // Les fond de carte 
 
     const centreloc = [45.43798463466298, 4.385923767089852];
@@ -21,30 +27,35 @@ const init = () => {
     var OpenStreetMap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         minZoom: 0,
         maxZoom: 20,
-        attribution: '© OpenStreetMap contributors, Tiles style by Humanitarian OpenStreetMap Team hosted by OpenStreetMap France',
+        attribution: '© OpenStreetMap contributors, Tiles style by Humanitarian OpenStreetMap',
         ext: 'jpg'
     });
     OpenStreetMap.addTo(map); 
 
-    // Définir un objet de correspondance pour les icônes
-    const iconMapping = {
-        "Sport en plein air": "docs/img/Exterieur.svg",
-        "Jeux de boule": "docs/img/Boule.svg",
-        "Sport aquatique": "docs/img/Piscine.svg",
-        "Equipement couvert": "docs/img/Gymnase.svg",
-        "Divers": "docs/img/Divers.svg" 
-    };
+    
 
-    // Fonction pour obtenir l'URL de l'icône en fonction du domaine
-     const getIconUrl = (domaine) => {
-        return iconMapping[domaine] || iconMapping["Divers"];
-    };
-
-    // Créez des groupes pour les marqueurs et les formes
+    // Créez des groupes pour les marqueurs
     const markerGroup = L.layerGroup().addTo(map);
-    const shapeGroup = L.layerGroup();
+    const quartierGroup = L.layerGroup();
 
+    // Ajouter la couche quartier 
+    const Quartier = L.geoJSON(quartier, {
+        onEachFeature: function(feature, layer) {
+            layer.bindPopup(feature.properties.code_2018.toString());
+        },
+        style: {
+            fillOpacity: 0.09,
+            opacity: 0.8,
+            weight: 1,
+            dashArray: '4, 10',
+            color: '#FFD133'
+        }
+    });
+    quartierGroup.addLayer(Quartier);
+    
     // ======= Ajout de la couche de Point =========
+
+    
 
     const addMarkerToMap = ({ latitude, longitude, pratique, domaine, id}, map) => {
         
@@ -61,7 +72,7 @@ const init = () => {
         markerGroup.addLayer(marker);
 
         marker.on('click', function () {
-            const ensemble = Data.Ensembles.find(ens => ens.id === id);
+            const ensemble = Data.Complexe.find(ens => ens.id === id);
             const cotes_ecrit = Data.Cotes.find(cot => cot.id_cote === id && cot.types === 'D');
             const cotes_icono = Data.Cotes.find(cot => cot.id_cote === id && cot.types === 'I');
             const cotes_plan = Data.Cotes.find(cot => cot.id_cote === id && cot.types === 'P');
@@ -74,7 +85,7 @@ const init = () => {
             const image_4 = Data.images.find(img => img.id_image === id && img.num === 4)
 
             document.getElementById('titre-description').innerHTML = ensemble ? ensemble.name : 'Non disponible';
-            document.getElementById('texte-description').innerHTML = truncateText(descriptionText, 100);
+            document.getElementById('texte-description').innerHTML = truncateText(descriptionText, 150);
             document.getElementById('description').innerHTML = ensemble ? ConversionSautLine(ensemble.description): 'Non disponible';
             document.getElementById('titre').innerHTML = ensemble ? ensemble.name :  'Non disponible';
             document.getElementById('addresse').innerHTML = ensemble ? ensemble.adresse :  'Non disponible';
@@ -83,72 +94,31 @@ const init = () => {
             document.getElementById('docs_icono').innerHTML = cotes_icono ? ConversionSautLine (cotes_icono.description_c): 'Non disponible';
             document.getElementById('docs_plan').innerHTML = cotes_plan ? ConversionSautLine (cotes_plan.description_c): 'Non disponible';
 
-            // Mise à jour de l'image 0
-            const imgElement0 = document.getElementById('id_img0');
-            const lienimg0 = document.getElementById('lien_img0');
-            if (imgElement0 && lienimg0) {
-                const imgUr0 = image_0 ? image_0.url : 'chemin/vers/image_non_disponible.png';
-                imgElement0.src = imgUr0;
-                lienimg0.href = imgUr0;
-            }
-
-            // Mise à jour de l'image 1
-            const imgElement1 = document.getElementById('id_img1');
-            const lienimg1 = document.getElementById('lien_img1');
-            if (imgElement1 && lienimg1) {
-                const imgUr1 = image_1 ? image_1.url : 'chemin/vers/image_non_disponible.png';
-                imgElement1.src = imgUr1;
-                lienimg1.href = imgUr1;
-            }
-
-            // Mise à jour de l'image 2
-            const imgElement2 = document.getElementById('id_img2');
-            const lienimg2 = document.getElementById('lien_img2');
-            if (imgElement2 && lienimg2) {
-                const imgUr2 = image_2 ? image_2.url : 'chemin/vers/image_non_disponible.png';
-                imgElement2.src = imgUr2;
-                lienimg2.href = imgUr2;
-            }
-
-            const imgElement3 = document.getElementById('id_img3');
-            const lienImg3 = document.getElementById('lien_img3');
-            if (imgElement3 && lienImg3) {
-                const imgUrl = image_3 ? image_3.url : 'chemin/vers/image_non_disponible.png';
-                imgElement3.src = imgUrl;
-                lienImg3.href = imgUrl;
-            }
-
-            // Mise à jour de l'image 4
-            const imgElement4 = document.getElementById('id_img4');
-            const lienimg4 = document.getElementById('lien_img4');
-            if (imgElement4 && lienimg4) {
-                const imgUr4 = image_4 ? image_4.url : 'chemin/vers/image_non_disponible.png';
-                imgElement4.src = imgUr4;
-                lienimg4.href = imgUr4;
-            }
-
+            updateImage('id_img0', 'lien_img0', image_0);
+            updateImage('id_img1', 'lien_img1', image_1);
+            updateImage('id_img2', 'lien_img2', image_2);
+            updateImage('id_img3', 'lien_img3', image_3);
+            updateImage('id_img4', 'lien_img4', image_4);
+            
             // Vérifiez si fulldesc-switch est déjà ouvert
             const fullDescSwitch = document.getElementById('full-description');
             if (!fullDescSwitch || !fullDescSwitch.hasAttribute('open')) {
                 document.getElementById('view_description').setAttribute('open', true);
             }
         });
-
+        // marker.description = pratique; 
         return marker;
     };
 
-    // Ajoute de la couche de Forme 
-    const addShapeToMap = ({ latlngs, pratique, domaine, id_forme }, map) => {
-        const shape = L.polygon(latlngs, {
-            cfillOpacity: 0.1,
-            color: '#3333ff',
-            lineOpacity: 0.1,
-            opacity: 0.1
-        });
-        shapeGroup.addLayer(shape);
-        return shape;
-    };
-    
+    function updateImage(imgElementId, lienImgId, image) {
+    const imgElement = document.getElementById(imgElementId);
+    const lienImg = document.getElementById(lienImgId);
+    if (imgElement && lienImg) {
+        const imgUrl = image ? image.url : 'chemin/vers/image_non_disponible.png';
+        imgElement.src = imgUrl;
+        lienImg.href = imgUrl;
+        }
+    }
 
     // Controle des fond de carte 
      var baseLayers = {
@@ -156,13 +126,19 @@ const init = () => {
         "Cartho":cartho
         
     };
-
     // Ajouter les couche dans l'overview
     var overlays = {
         "Marker": markerGroup,
-        "Forme": shapeGroup
+        "Quartier": quartierGroup
     };
     L.control.layers(baseLayers, overlays,).addTo(map);
+
+
+    // =====================================================================
+    // =================         Création des list        ==================
+    // =====================================================================
+    
+    
 
     // Ajouter l'écouteur d'événement sur l'élément parent
     listLoc.addEventListener('click', (event) => {
@@ -184,12 +160,32 @@ const init = () => {
         }
     });
 
+    // Ajouter l'écouteur d'événement pour les éléments de la sous-liste
+    listLoc.addEventListener('click', (event) => {
+        const target = event.target;
+
+        // Vérifiez si l'élément cliqué est un élément de la sous-liste
+        if (target.closest('.equip-item')) {
+            const liEquip = target.closest('.equip-item');
+            const lat = liEquip.dataset.lat;
+            const lon = liEquip.dataset.lon;
+            const pratique = liEquip.dataset.pratique;
+
+            if (!isNaN(lat) && !isNaN(lon)) {
+                L.popup()
+                    .setLatLng([lat, lon])
+                    .setContent(`<strong>Pratique:</strong> ${pratique}`)
+                    .openOn(map);
+
+            }
+        }
+    });
+
     // Ajoutez une classe CSS pour masquer initialement les sous-listes
     const style = document.createElement('style');
     style.innerHTML = `
         .hidden {
             display: none;
-
         }
         .sub-list {
             margin-left: 2px; 
@@ -197,100 +193,202 @@ const init = () => {
     `;
     document.head.appendChild(style);
 
-    // ======= Liste Filtrage par domaine ========
+    // ======= Liste Filtrage 1 par domaine ========
     let listEl2 = document.querySelector('ul#list-filtre');
     const frag2 = document.createDocumentFragment();
-
     const equipment = new Set();
-    Data.Equipements.forEach ((location2) => {
-        if (!equipment.has(location2.domaine)){
+    Data.Equipements.forEach((equip1) => {
+        if (!equipment.has(equip1.domaine)){
             const liEl2 = document.createElement('li');
-            liEl2.innerText = location2.domaine;
-            liEl2.dataset.lat = location.lat;
-            liEl2.dataset.lon = location.lon;
+            // Créer l'élément d'image
+            const imgEl = document.createElement('img');
+            imgEl.src = getIconUrl(equip1.domaine);
+            imgEl.alt = equip1.domaine;
+            imgEl.style.width = '20px';  
+            imgEl.style.height = '20px'; 
+            // Créer l'élément de texte
+            const textEl = document.createElement('span');
+            textEl.innerText = equip1.domaine;
+            // Ajouter l'image et le texte au li
+            liEl2.appendChild(imgEl);
+            liEl2.appendChild(textEl);
+            liEl2.dataset.lat = equip1.lat; 
+            liEl2.dataset.lon = equip1.lon; 
             frag2.appendChild(liEl2);
-            equipment.add(location2.domaine);
+            equipment.add(equip1.domaine);
         }
     });
+    listEl2.appendChild(frag2);
 
-    listEl2.appendChild(frag2)
+    // Ajouter une deuxieme filtrage 2  par type 
+    let ListFiltre2 = document.querySelector('ul#second-filtre')
+    const frag3 = document.createDocumentFragment();
+    const equipement = new Set();
+    Data.Equipements.forEach((equip) => {
+        if (!equipement.has(equip.type)){
+            const liequip = document.createElement('li')
+            const textEl = document.createElement('span');
+            // Création de  l'élément switch
+            const switchInput = document.createElement('input');
+            switchInput.type = 'checkbox';
+            switchInput.id = `switch-${equip.type}`;
+            switchInput.dataset.type = equip.type;
+            textEl.innerText = equip.type;
+
+            const switchLabel = document.createElement('label');
+            switchLabel.htmlFor = switchInput.id;
+            switchLabel.appendChild(switchInput);
+            switchLabel.appendChild(textEl);
+            
+            // Ajouter le switch et le texte à l'élément <li>
+            liequip.appendChild(switchInput);
+            liequip.appendChild(switchLabel);
+            liequip.dataset.lat = equip.lat
+            liequip.dataset.lon = equip.lon
+            frag3.appendChild(liequip);
+            equipement.add(equip.type);
+
+        }
+    });
+    ListFiltre2.appendChild(frag3);
 
 
-    // ======== Fonction de filtrage en fonction du champs domaine ===========
-    // Point
-    function updateFilterByEquipment(equipment) {
-        const filteredEquipments = Data.Equipements.filter((equip) => equip.domaine === equipment);
-        currentFilteredEquipments = filteredEquipments; // Met à jour les équipements filtrés actuels
-        updateFilterByDate(filteredEquipments, currentFilteredShapes);
-        displayCurrentFilter(equipment); //affiche le filtre actuelle
+    // =====================================================================
+    // ==============                Filtre            =====================
+    // =====================================================================
+
+    const masqueSwitch = document.getElementById('masque-switch');
+    let isMasqueSwitchChecked = false; // État initial du switch
+    
+    let currentEquipment = null;
+    let checkedTypes = [];
+    let curseurValeur = document.getElementById('date-slider').value;
+    
+    // Fonction de filtrage globale avec ajout de marqueurs à la carte
+    function applyFilters() {
+        const curseurValeur = document.getElementById('date-slider').value;
+        const dateCurseur = new Date(curseurValeur);
+
+        let filteredEquipments = Data.Equipements.filter((equip) => {
+            const passesEquipmentFilter = !currentEquipment || equip.domaine === currentEquipment;
+            const passesTypeFilter = checkedTypes.length === 0 || checkedTypes.includes(equip.type);
+            const passesDateFilter = new Date(equip.dateD) <= dateCurseur && new Date(equip.dateF) >= dateCurseur;
+            const passesMasqueFilter = !isMasqueSwitchChecked || equip.p_cotes;
+
+            return passesEquipmentFilter && passesTypeFilter && passesDateFilter && passesMasqueFilter;
+        });
+
+        currentFilteredEquipments = filteredEquipments;
+        updateMap(filteredEquipments);
+
+        // Collecter les domaines des équipements filtrés
+        let filteredDomains = filteredEquipments.map(equip => equip.domaine);
+        // Supprimer les doublons
+        filteredDomains = [...new Set(filteredDomains)];
+
+        // Déterminer si le filtre de domaine est actif
+        const isEquipmentFilterActive = currentEquipment !== null;
+
+        displayCurrentFilter(isEquipmentFilterActive ? filteredDomains : []);
     }
 
-    // Shape
-    function updateFilterByShape(shape) {
-        const filteredShapes = Data.Formes.filter((form) => form.domaine === shape);
-        currentFilteredShapes = filteredShapes;
-        updateFilterByDate(currentFilteredEquipments, filteredShapes);
+    // Fonction pour mettre à jour la carte avec les équipements filtrés
+    function updateMap(filteredEquipments) {
+        markerGroup.clearLayers();
+        let Nb_equip = 0;
+
+        filteredEquipments.forEach((equip) => {
+            // Ajout d'une vérification pour s'assurer que les coordonnées sont définies
+            if (equip.latitude && equip.longitude) {
+                addMarkerToMap({
+                    latitude: equip.latitude,
+                    longitude: equip.longitude,
+                    pratique: equip.pratique,
+                    domaine: equip.domaine,
+                    id: equip.id_equip
+                }, map);
+                Nb_equip++;
+            }
+        });
+    
+        if (!map.hasLayer(markerGroup)) {
+            markerGroup.addTo(map);
+        }
+
+        updateMarkerCount(Nb_equip); // Mettre à jour l'affichage du nombre de marqueurs
+    }
+
+    function updateMarkerCount(count) {
+        const markerCountDisplay = document.getElementById('Nb_equip');
+        markerCountDisplay.innerText = `Nombre de marqueurs: ${count}`;
     }
 
     // Fonction pour afficher le filtre actuel
-    function displayCurrentFilter(equipment) {
+    function displayCurrentFilter(filteredDomains) {
         const filterDisplay = document.getElementById('Filtre-actu');
-        if (equipment) {
-            filterDisplay.innerHTML = `Filtre actuel: ${equipment}`;
+        if (filteredDomains) {
+            filterDisplay.innerHTML = `Filtre actuel: ${filteredDomains}`;
         } else {
             filterDisplay.innerHTML = 'Filtre actuel: Aucun';
         }
     }
-    
-    // Crée un liste des domaine et filter les marher et les forme
-    let currentEquipment = null;
-    let currentShape = null;
 
+    // Gestion des filtres
+    document.getElementById('date-slider').addEventListener('input', () => {
+        applyFilters();
+    });
+
+    // Filter pas cotes 
+     masqueSwitch.addEventListener('change', (event) => {
+        isMasqueSwitchChecked = event.target.checked;
+        applyFilters();
+    });
+
+    // Filtre par domaine 
     listEl2.addEventListener('click', ({ target }) => {
-        if (target.nodeName !== 'LI') {
+        const li = target.closest('li');
+        if (!li) {
             return;
         }
-        const equipment = target.innerHTML.trim();
+        const equipment = li.querySelector('span').innerText.trim();
         if (equipment === currentEquipment) {
-            // Si l'équipement sélectionné est le même que l'équipement actuel, réinitialiser la sélection
-            currentFilteredEquipments = Data.Equipements; 
-            updateFilterByDate(currentFilteredEquipments, currentFilteredShapes); 
             currentEquipment = null; // Réinitialiser currentEquipment à null
             displayCurrentFilter(null);
         } else {
-            updateFilterByEquipment(equipment);
             currentEquipment = equipment;
         }
-        currentShape = null;
+        applyFilters();
     });
 
-    // Gestionnaire d'événements pour la liste des formes
-    listEl2.addEventListener('click', ({ target }) => {
-        if (target.nodeName !== 'LI') {
+    // Filtre par type d'equipement
+    ListFiltre2.addEventListener('click', ({ target }) => {
+        if (target.tagName !== 'INPUT' || target.type !== 'checkbox') {
             return;
         }
-        const shape = target.innerHTML.trim();
-
-        if (shape === currentShape) {
-            currentFilteredShapes = Data.Formes; // Réinitialiser les équipements filtrés
-            updateFilterByDate(currentFilteredShapes, currentFilteredShapes); // Afficher tous les équipements
-            currentShape = null; // Réinitialiser currentShape à null
-        } else {
-            // Sinon, filtrer et afficher les équipements en fonction de la forme sélectionnée
-            updateFilterByShape(shape);
-            currentShape = shape; // Mettre à jour currentShape avec la nouvelle forme sélectionnée
-        } 
+        checkedTypes = Array.from(ListFiltre2.querySelectorAll('input[type="checkbox"]:checked'))
+            .map((input) => input.dataset.type);
+    
+        applyFilters();
     });
 
+    // =====================================================================
+    // ==============      Filtre par date et affichage     ================
+    // =====================================================================
+
+    // Affichage et paramétrage du fond de carte
+    updateDateDisplay (curseurValeur);
+
+    const startButton = document.getElementById('startButton');
+    const resetButton = document.getElementById('resetButton');
+    const dateDisplay = document.querySelectorAll('#dateDisplay, #dateDisplay2');
+    let intervalId;
     
-    // ===== Fonction pour filtrer et afficher les équipements en fonction de la date ====
     function updateFilterAndDisplay() {
         const curseurValeur = document.getElementById('date-slider').value;
         updateDateDisplay(curseurValeur);
-        updateFilterByDate(currentFilteredEquipments, currentFilteredShapes);
+        updateFilterByDate(currentFilteredEquipments);
     }
-
-    // Ajoutez un gestionnaire d'événements pour le bouton de démarrage
+    // Ajoutez un gestionnaire d'événements pour les date 
     startButton.addEventListener('click', () => {
         if (intervalId) {
             // Si l'intervalle est déjà en cours, arrêtez-le en cliquant à nouveau sur le bouton
@@ -310,9 +408,21 @@ const init = () => {
 
     });
 
-    // Ajoutez un gestionnaire d'événements pour le bouton de réinitialisation
+    resetButton.addEventListener('click', () => {
+        document.getElementById('date-slider').value = 1900; // Réinitialisez la valeur du curseur à 1900
+        updateDateDisplay(1900); // Mettez à jour l'affichage de la date 
+        updateFilterAndDisplay(); // Mettre à jour le filter 
+    });
+    fin.addEventListener('click', () => {
+        document.getElementById('date-slider').value = 2023; 
+        updateDateDisplay(2023); 
+        updateFilterAndDisplay();
+    });
+    
 
-    function updateFilterByDate(filteredEquipments, filteredShapes) {
+    // ================== Ajoutez un gestionnaire d'événements pour le bouton de réinitialisation ===============
+
+    function updateFilterByDate(filteredEquipments) {
         let curseurValeur = document.getElementById('date-slider').value;
         const dateCurseur = new Date(curseurValeur);
 
@@ -321,15 +431,8 @@ const init = () => {
             const dateF = new Date(equip.dateF);
             return dateCurseur >= dateD && dateCurseur <= dateF;
         });
-
-        const activeShapes = filteredShapes.filter((shape) => {
-            const dateD = new Date(shape.dateD_shape);
-            const dateF = new Date(shape.dateF_shape);
-            return dateCurseur >= dateD && dateCurseur <= dateF;
-        });
-
         map.eachLayer((layer) => {
-            if (layer instanceof L.Marker || layer instanceof L.Polygon) {
+            if (layer instanceof L.Marker) {
                 map.removeLayer(layer);
             }
         });
@@ -343,26 +446,16 @@ const init = () => {
                 id: equip.id_equip
             }, map);
         });
-
-        activeShapes.forEach((shape) => {
-            addShapeToMap({
-                latlngs: shape.latlngs,
-                pratique: shape.pratique,
-                domaine: shape.domaine,
-                id_forme: shape.id_forme
-            }, map);
-        });
-
         updateNbEquipDisplay(activeEquipments.length);
     }
 
     let currentFilteredEquipments = Data.Equipements;
-    let currentFilteredShapes = Data.Formes;
-    updateFilterByDate(currentFilteredEquipments, currentFilteredShapes);
+    updateFilterByDate(currentFilteredEquipments);
 
     document.getElementById('date-slider').addEventListener('input', () => {
-        updateFilterByDate(currentFilteredEquipments, currentFilteredShapes);
+        updateFilterByDate(currentFilteredEquipments);
     });
+    
     
 };
 
