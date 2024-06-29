@@ -54,9 +54,6 @@ const init = () => {
     quartierGroup.addLayer(Quartier);
     
     // ======= Ajout de la couche de Point =========
-
-    
-
     const addMarkerToMap = ({ latitude, longitude, pratique, domaine, id}, map) => {
         
         const iconUrl = getIconUrl(domaine); // Personaliser les marqueur 
@@ -137,10 +134,55 @@ const init = () => {
     // =====================================================================
     // =================         Création des list        ==================
     // =====================================================================
+
+    // Création de la liste d'équipements
+    Data.Complexe.forEach((loca) => {
+        const liEl = document.createElement('li');
+        liEl.innerHTML = loca.name;
+        liEl.dataset.lat = loca.lat;
+        liEl.dataset.lon = loca.lon;
     
+        // Créer une sous-liste pour les équipements
+        const ulEquip = document.createElement('ul');
+        ulEquip.classList.add('sub-list', 'hidden');
+    
+        // Ajouter les équipements à la sous-liste
+        if (ensembleEquipements[loca.id]) {
+            ensembleEquipements[loca.id].forEach((equip) => {
+                const liEquip = document.createElement('li');
+                liEquip.classList.add('equip-item');
+    
+                // Créer l'élément d'image
+                const imgEl = document.createElement('img');
+                imgEl.src = getIconUrl(equip.domaine); // Utilisation de la fonction getIconUrl
+                imgEl.alt = equip.pratique;
+                imgEl.style.width = '20px';
+                imgEl.style.height = '20px';
+    
+                // Créer l'élément de texte
+                const textEl = document.createElement('span');
+                textEl.innerText = equip.pratique;
+    
+                // Ajouter l'image et le texte au li
+                liEquip.appendChild(imgEl);
+                liEquip.appendChild(textEl);
+                ulEquip.appendChild(liEquip);
+    
+                // Ajouter les données pratiques au liEquip pour utilisation ultérieure
+                liEquip.dataset.lat = equip.latitude;
+                liEquip.dataset.lon = equip.longitude;
+                liEquip.dataset.pratique = equip.pratique;
+            });
+        }
+    
+        liEl.appendChild(ulEquip);
+        frag.appendChild(liEl);
+    });
+    
+    listLoc.appendChild(frag);
     
 
-    // Ajouter l'écouteur d'événement sur l'élément parent
+    // Ajouter l'écouteur d'événement sur l'élément parent pour afficher ou masquer les pratiques 
     listLoc.addEventListener('click', (event) => {
         const target = event.target;
         
@@ -160,7 +202,7 @@ const init = () => {
         }
     });
 
-    // Ajouter l'écouteur d'événement pour les éléments de la sous-liste
+    // Ajouter l'écouteur d'événement pour afficher le popup des éléments de la sous-liste
     listLoc.addEventListener('click', (event) => {
         const target = event.target;
 
@@ -176,24 +218,11 @@ const init = () => {
                     .setLatLng([lat, lon])
                     .setContent(`<strong>Pratique:</strong> ${pratique}`)
                     .openOn(map);
-
             }
         }
     });
 
-    // Ajoutez une classe CSS pour masquer initialement les sous-listes
-    const style = document.createElement('style');
-    style.innerHTML = `
-        .hidden {
-            display: none;
-        }
-        .sub-list {
-            margin-left: 2px; 
-        }
-    `;
-    document.head.appendChild(style);
-
-    // ======= Liste Filtrage 1 par domaine ========
+    // Liste Filtrage 1 par domaine
     let listEl2 = document.querySelector('ul#list-filtre');
     const frag2 = document.createDocumentFragment();
     const equipment = new Set();
@@ -254,16 +283,16 @@ const init = () => {
 
 
     // =====================================================================
-    // ==============                Filtre            =====================
+    // =============          Fonctions de filtrage            ==============
     // =====================================================================
 
     const masqueSwitch = document.getElementById('masque-switch');
     let isMasqueSwitchChecked = false; // État initial du switch
-    
+
     let currentEquipment = null;
     let checkedTypes = [];
     let curseurValeur = document.getElementById('date-slider').value;
-    
+
     // Fonction de filtrage globale avec ajout de marqueurs à la carte
     function applyFilters() {
         const curseurValeur = document.getElementById('date-slider').value;
@@ -298,7 +327,6 @@ const init = () => {
         let Nb_equip = 0;
 
         filteredEquipments.forEach((equip) => {
-            // Ajout d'une vérification pour s'assurer que les coordonnées sont définies
             if (equip.latitude && equip.longitude) {
                 addMarkerToMap({
                     latitude: equip.latitude,
@@ -310,14 +338,14 @@ const init = () => {
                 Nb_equip++;
             }
         });
-    
+
         if (!map.hasLayer(markerGroup)) {
             markerGroup.addTo(map);
         }
-
-        updateMarkerCount(Nb_equip); // Mettre à jour l'affichage du nombre de marqueurs
+        updateMarkerCount(Nb_equip); 
     }
 
+    // Mettre à jour l'affichage du nombre de marqueurs
     function updateMarkerCount(count) {
         const markerCountDisplay = document.getElementById('Nb_equip');
         markerCountDisplay.innerText = `Nombre de marqueurs: ${count}`;
@@ -333,18 +361,18 @@ const init = () => {
         }
     }
 
-    // Gestion des filtres
+    // Initialisation du filtre par date
     document.getElementById('date-slider').addEventListener('input', () => {
         applyFilters();
     });
 
-    // Filter pas cotes 
-     masqueSwitch.addEventListener('change', (event) => {
+    // Filter 1 par présence ou non des cotes
+    masqueSwitch.addEventListener('change', (event) => {
         isMasqueSwitchChecked = event.target.checked;
         applyFilters();
     });
 
-    // Filtre par domaine 
+    // Filtre 2 par domaine
     listEl2.addEventListener('click', ({ target }) => {
         const li = target.closest('li');
         if (!li) {
@@ -360,14 +388,14 @@ const init = () => {
         applyFilters();
     });
 
-    // Filtre par type d'equipement
+    // Filtre 3 par type d'equipement
     ListFiltre2.addEventListener('click', ({ target }) => {
         if (target.tagName !== 'INPUT' || target.type !== 'checkbox') {
             return;
         }
         checkedTypes = Array.from(ListFiltre2.querySelectorAll('input[type="checkbox"]:checked'))
             .map((input) => input.dataset.type);
-    
+
         applyFilters();
     });
 
@@ -376,19 +404,24 @@ const init = () => {
     // =====================================================================
 
     // Affichage et paramétrage du fond de carte
-    updateDateDisplay (curseurValeur);
+    const dateDisplay = document.querySelectorAll('#dateDisplay, #dateDisplay2');
+
+    function updateDateDisplay(date) {
+        dateDisplay.forEach(display => display.innerText = date);
+    }
+    updateDateDisplay(curseurValeur);
 
     const startButton = document.getElementById('startButton');
     const resetButton = document.getElementById('resetButton');
-    const dateDisplay = document.querySelectorAll('#dateDisplay, #dateDisplay2');
     let intervalId;
-    
+
     function updateFilterAndDisplay() {
         const curseurValeur = document.getElementById('date-slider').value;
         updateDateDisplay(curseurValeur);
-        updateFilterByDate(currentFilteredEquipments);
+        applyFilters();
     }
-    // Ajoutez un gestionnaire d'événements pour les date 
+
+    // Ajoutez un gestionnaire d'événements pour les dates
     startButton.addEventListener('click', () => {
         if (intervalId) {
             // Si l'intervalle est déjà en cours, arrêtez-le en cliquant à nouveau sur le bouton
@@ -399,62 +432,34 @@ const init = () => {
             intervalId = setInterval(() => {
                 // Incrémentez la valeur du curseur (ou modifiez-la selon votre logique)
                 const currentValue = parseInt(document.getElementById('date-slider').value);
-                const newValue = currentValue + 2; // Par exemple, incrémente de 1 à chaque fois
-                document.getElementById('date-slider').value = newValue; updateDateDisplay(newValue);
+                let newValue = currentValue + 1; // Par exemple, incrémente de 2 à chaque fois
+                if (newValue > 2023) {
+                    newValue = 1900; // Réinitialisez à 1900 si on dépasse 2023
+                }
+
+                document.getElementById('date-slider').value = newValue;
                 updateFilterAndDisplay();
-            }, 200); 
+            }, 200);
             startButton.textContent = 'Stop'; // Changez le texte du bouton pour "Stop"
         }
-
     });
 
     resetButton.addEventListener('click', () => {
         document.getElementById('date-slider').value = 1900; // Réinitialisez la valeur du curseur à 1900
-        updateDateDisplay(1900); // Mettez à jour l'affichage de la date 
-        updateFilterAndDisplay(); // Mettre à jour le filter 
+        updateDateDisplay(1900); // Mettez à jour l'affichage de la date
+        updateFilterAndDisplay(); // Mettre à jour le filtre
     });
+
     fin.addEventListener('click', () => {
-        document.getElementById('date-slider').value = 2023; 
-        updateDateDisplay(2023); 
+        document.getElementById('date-slider').value = 2023;
+        updateDateDisplay(2023);
         updateFilterAndDisplay();
     });
-    
 
-    // ================== Ajoutez un gestionnaire d'événements pour le bouton de réinitialisation ===============
-
-    function updateFilterByDate(filteredEquipments) {
-        let curseurValeur = document.getElementById('date-slider').value;
-        const dateCurseur = new Date(curseurValeur);
-
-        const activeEquipments = filteredEquipments.filter((equip) => {
-            const dateD = new Date(equip.dateD);
-            const dateF = new Date(equip.dateF);
-            return dateCurseur >= dateD && dateCurseur <= dateF;
-        });
-        map.eachLayer((layer) => {
-            if (layer instanceof L.Marker) {
-                map.removeLayer(layer);
-            }
-        });
-
-        activeEquipments.forEach((equip) => {
-            addMarkerToMap({
-                latitude: equip.latitude,
-                longitude: equip.longitude,
-                pratique: equip.pratique,
-                domaine: equip.domaine,
-                id: equip.id_equip
-            }, map);
-        });
-        updateNbEquipDisplay(activeEquipments.length);
-    }
-
+    // Applique les filtres initialement
     let currentFilteredEquipments = Data.Equipements;
-    updateFilterByDate(currentFilteredEquipments);
+    applyFilters();
 
-    document.getElementById('date-slider').addEventListener('input', () => {
-        updateFilterByDate(currentFilteredEquipments);
-    });
     
     
 };

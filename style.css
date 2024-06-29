@@ -42,7 +42,7 @@ body{
     position: relative;
     width: 15%;
     height: 8%;
-    padding-left: 6%;
+    padding-left: 2vh;
     margin-left: 2%;
 }
 .slider {
@@ -285,8 +285,10 @@ li:hover{
     padding: 0px;
 }
 
-#view-list h4 {
+#view-list h2 {
     margin-left: 10px;
+    margin-top: 0;
+    margin-bottom: 1px;
 }
 
 #liste-content {
@@ -417,10 +419,24 @@ li:hover{
 
 /* ============ filtre ==========  */
 #view-filtre{
-    width: 20%;
-    top: 20%;
+    width: 35vh;
+    top: 10%;
     height: auto;
-    margin-left: calc(0vh + 7vh);
+    margin-left: calc(0vh + 9vh);
+}
+
+#view-filtre h2 {
+    margin-left: 5px;
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#view-filtre h4 {
+    margin-left: 5px;
+    padding: 0;
+    margin-top: 2px;
+    margin-bottom: 0;
 }
 #list-filtre{
     width: auto;
@@ -429,7 +445,7 @@ li:hover{
 
 #second-filtre {
     width: 96%;
-    height: 150px;
+    height: 115px;
     overflow-y: scroll;
 }
 
@@ -553,9 +569,9 @@ li:hover{
     
 
     #view-list{
-        width: 25vh;
-        top: 5%;
-        height: calc(100% - 11%);
+        width: 35vh;
+        top: 10%;
+        height: calc(100% - 16%);
         margin-right: 5px;
         padding: 0px;
     }
@@ -568,10 +584,11 @@ li:hover{
     }
 
     #view-filtre{
-        width: 20vh;
-        top: 20%;
-        height: auto;
-        margin-left: calc(0vh + 7vh);
+        width: 35vh;
+        top: 15%;
+        height: calc(100% - 20%);
+
+        margin-left: calc(0vh + 8vh);
     }
     
     
@@ -627,6 +644,14 @@ li:hover{
         margin: 0;
     
     }
+    .switch {
+        position: relative;
+        width: 15%;
+        height: 8%;
+        padding-left: 6%;
+        margin-left: 2%;
+    }
+    
 
     .leaflet-control-layers {
         z-index: 9999;
@@ -693,7 +718,7 @@ li:hover{
     }
 
     .info p {
-        font-size: 20%;
+        font-size: 30%;
     }
 
     #view-apropos p {

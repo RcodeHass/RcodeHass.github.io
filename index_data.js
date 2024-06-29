@@ -1,6 +1,8 @@
 
-// ============ Programmation des bouttons ============
 
+// =====================================================================
+// ==============       Programmation des bouttons       ===============
+// =====================================================================
 function toggleDialog(dialogs, targetDialog, exceptions = []) {
     dialogs.forEach(dialog => {
         if (dialog === targetDialog) {
@@ -57,7 +59,10 @@ Array.from(closeButtons).forEach(button => {
     });
 });
 
-// ========== Initialisation de la liste Ensemble Sportif ============
+
+// =====================================================================
+// ============        Initialisation de la données     ===============
+// =====================================================================
 
 const Data = {
     Complexe: Complexe.map((element) => {
@@ -115,6 +120,25 @@ const Data = {
     })
 };
 
+//  ============== jointure entre complexe et equipement ==============
+
+let listLoc = document.querySelector('ul#list-equipement');
+const frag = document.createDocumentFragment();
+// Créez un objet de correspondance entre les Complexe et leurs équipements
+const ensembleEquipements = Data.Equipements.reduce((acc, equip) => {
+    if (!acc[equip.id_equip]) {
+        acc[equip.id_equip] = [];
+    }
+    acc[equip.id_equip].push(equip);
+    return acc;
+}, {});
+
+
+// =====================================================================
+// ===============        Autre fonction accessoire      ===============
+// =====================================================================
+
+
 // Pour convertir les saute de ligne de js a html
 const ConversionSautLine = (text) => {
     return text ? text.replace(/\\n\\n/g, '<br/><br/>') : 'Non disponible';
@@ -134,7 +158,7 @@ const iconMapping = {
     return iconMapping[domaine] || iconMapping["Divers"];
 };
 
-// Les Dates 
+// Masquer les commande de la div date 
 document.getElementById('dev-date').addEventListener('click', function() {
     const playDateDiv = document.getElementById('play-date');
     if (playDateDiv.style.display === 'none' || playDateDiv.style.display === '') {
@@ -143,7 +167,6 @@ document.getElementById('dev-date').addEventListener('click', function() {
         playDateDiv.style.display = 'none';
     }
 });
-
 document.getElementById('play-date').style.display = 'block';
 
 // Afficher la nav bar en mode smartphone 
@@ -162,69 +185,9 @@ function updateNbEquipDisplay(count) {
     if (nbEquipElement) {
         nbEquipElement.innerHTML = `Nb d'équipements: ${count}`;
     }
-   
 }
 
-//  ============== Liste les parc sportif ==============
-
-let listLoc = document.querySelector('ul#list-equipement');
-const frag = document.createDocumentFragment();
-// Créez un objet de correspondance entre les Complexe et leurs équipements
-const ensembleEquipements = Data.Equipements.reduce((acc, equip) => {
-    if (!acc[equip.id_equip]) {
-        acc[equip.id_equip] = [];
-    }
-    acc[equip.id_equip].push(equip);
-    return acc;
-}, {});
-
-
-Data.Complexe.forEach((loca) => {
-    const liEl = document.createElement('li');
-    liEl.innerHTML = loca.name;
-    liEl.dataset.lat = loca.lat;
-    liEl.dataset.lon = loca.lon;
-
-    // Créer une sous-liste pour les équipements
-    const ulEquip = document.createElement('ul');
-    ulEquip.classList.add('sub-list', 'hidden');
-
-    // Ajouter les équipements à la sous-liste
-    if (ensembleEquipements[loca.id]) {
-        ensembleEquipements[loca.id].forEach((equip) => {
-            const liEquip = document.createElement('li');
-            liEquip.classList.add('equip-item');
-
-            // Créer l'élément d'image
-            const imgEl = document.createElement('img');
-            imgEl.src = getIconUrl(equip.domaine); // Utilisation de la fonction getIconUrl
-            imgEl.alt = equip.pratique;
-            imgEl.style.width = '20px';
-            imgEl.style.height = '20px';
-
-            // Créer l'élément de texte
-            const textEl = document.createElement('span');
-            textEl.innerText = equip.pratique;
-
-            // Ajouter l'image et le texte au li
-            liEquip.appendChild(imgEl);
-            liEquip.appendChild(textEl);
-            ulEquip.appendChild(liEquip);
-
-            // Ajouter les données pratiques au liEquip pour utilisation ultérieure
-            liEquip.dataset.lat = equip.latitude;
-            liEquip.dataset.lon = equip.longitude;
-            liEquip.dataset.pratique = equip.pratique;
-        });
-    }
-
-    liEl.appendChild(ulEquip);
-    frag.appendChild(liEl);
-});
-
-listLoc.appendChild(frag);
-
-// ============== Description ================
+// ============== Controler la longeur des texte des description ================
 const truncateText = (text, limit) => {
     if (text.length > limit) {
         return text.substring(0, limit) + '... lire la suite';
@@ -232,7 +195,7 @@ const truncateText = (text, limit) => {
     return text;
 };
 
-// JavaScript pour vérifier la largeur de l'écran et afficher ou masquer le contenu des date 
+// Vérifier la largeur de l'écran et afficher ou masquer le contenu des date 
 document.addEventListener('DOMContentLoaded', function() {
     const playDateContent = document.getElementById('play-date');
     const viewDateDialog = document.getElementById('view-date');
@@ -248,5 +211,15 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', adjustPlayDateVisibility);
 });
 
-
+// Ajoutez une classe CSS pour masquer initialement les sous-listes
+const style = document.createElement('style');
+style.innerHTML = `
+    .hidden {
+        display: none;
+    }
+    .sub-list {
+        margin-left: 2px; 
+    }
+`;
+document.head.appendChild(style);
 
