@@ -113,11 +113,14 @@ const Data = {
             id_forme: feature.id,
             latlngs: feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]), // [lat, lon]
             domaine: feature.properties.DOMAINE,
-            dateD_shape: new Date(feature.properties.DATE_INNAU),
+            dateD_shape: new Date(feature.properties.DATE_INAU),
             dateF_shape: new Date(feature.properties.DATE_DEM),
+            p_cotes: feature.properties.P_COTE,
+            type: feature.properties.TYPE_EQUIP
         };
     })
 };
+
 
 //  ============== jointure entre complexe et equipement ==============
 

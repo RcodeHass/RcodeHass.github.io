@@ -33,6 +33,7 @@ const init = () => {
 
     // Créez des groupes pour les marqueurs
     const markerGroup = L.layerGroup().addTo(map);
+    const shapeGroup = L.layerGroup().addTo(map);
     const quartierGroup = L.layerGroup();
 
     // Ajouter la couche quartier 
@@ -114,6 +115,18 @@ const init = () => {
         }
     }
 
+    // Ajoute de la couche de Forme 
+    const addShapeToMap = ({ latlngs, pratique, domaine, id_forme }, map) => {
+        const shape = L.polygon(latlngs, {
+            cfillOpacity: 0.1,
+            color: '#3333ff',
+            lineOpacity: 0.1,
+            opacity: 0.1
+        });
+        shapeGroup.addLayer(shape);
+        return shape;
+    };
+
     // Controle des fond de carte 
      var baseLayers = {
         "OpenSteetMap": OpenStreetMap,
@@ -123,6 +136,7 @@ const init = () => {
     // Ajouter les couche dans l'overview
     var overlays = {
         "Marker": markerGroup,
+        "Forme": shapeGroup,
         "Quartier": quartierGroup
     };
     L.control.layers(baseLayers, overlays,).addTo(map);
@@ -198,9 +212,12 @@ const init = () => {
 
     const masqueSwitch = document.getElementById('masque-switch');
     let isMasqueSwitchChecked = false; // État initial du switch
+    let isShapeMasqueSwitchChecked = false; 
 
     let currentEquipment = null;
+    let currentShape = null;
     let checkedTypes = [];
+    let checkedShapeTypes = [];
     let curseurValeur = document.getElementById('date-slider').value;
 
     // Fonction de filtrage globale avec ajout de marqueurs à la carte
@@ -216,9 +233,19 @@ const init = () => {
             return passesEquipmentFilter && passesTypeFilter && passesDateFilter && passesMasqueFilter;
         });
 
+        let filteredShapes = Data.Formes.filter((shape) => {
+            const passesShapeMasqueFilter = !isShapeMasqueSwitchChecked || shape.p_cotes;
+            const passesShapeFilter = !currentShape || shape.domaine === currentShape;
+            const passesDomainFilter = !currentEquipment || shape.domaine === currentEquipment;
+            const passesShapeTypeFilter = checkedShapeTypes.length === 0 || checkedShapeTypes.includes(shape.type);
+            const passesShapeDateFilter = new Date(shape.dateD_shape) <= dateCurseur && new Date(shape.dateF_shape) >= dateCurseur;
+            return passesShapeMasqueFilter && passesShapeFilter && passesDomainFilter && passesShapeTypeFilter && passesShapeDateFilter ;
+        });
+
         currentFilteredEquipments = filteredEquipments;
-        updateMap(filteredEquipments);
-        updateEquipmentList(filteredEquipments); // Mettre à jour la liste d'équipements
+        currentFilteredShapes = filteredShapes;
+        updateMap(filteredEquipments, filteredShapes);
+        updateEquipmentList(filteredEquipments, filteredShapes); // Mettre à jour la liste d'équipements
 
         // Collecter les domaines des équipements filtrés
         let filteredDomains = filteredEquipments.map(equip => equip.domaine);
@@ -232,8 +259,9 @@ const init = () => {
     }
 
     // Fonction pour mettre à jour la carte avec les équipements filtrés
-    function updateMap(filteredEquipments) {
+    function updateMap(filteredEquipments,filteredShapes) {
         markerGroup.clearLayers();
+        shapeGroup.clearLayers();
         let Nb_equip = 0;
 
         filteredEquipments.forEach((equip) => {
@@ -249,8 +277,25 @@ const init = () => {
             }
         });
 
+        filteredShapes.forEach((shape) => {
+            if (shape.latlngs && shape.latlngs.length > 0) { // Vérifiez si les coordonnées sont définies et non vides
+                addShapeToMap({
+                    latlngs: shape.latlngs,
+                    pratique: shape.pratique,
+                    domaine: shape.domaine,
+                    id_forme: shape.id_forme,
+                    p_cotes : shape.p_cotes
+                }, map); // Ajouter les formes filtrées à la carte
+                Nb_equip++;
+            }
+        });
+
         if (!map.hasLayer(markerGroup)) {
             markerGroup.addTo(map);
+        }
+
+        if (!map.hasLayer(shapeGroup)) {
+            shapeGroup.addTo(map);
         }
         updateMarkerCount(Nb_equip); 
     }
@@ -328,11 +373,6 @@ const init = () => {
         listLoc.appendChild(frag);
     }
 
-    // Initialisation du filtre par date
-    document.getElementById('date-slider').addEventListener('input', () => {
-        applyFilters();
-    });
-
     // Filter 1 par présence ou non des cotes
     masqueSwitch.addEventListener('change', (event) => {
         isMasqueSwitchChecked = event.target.checked;
@@ -367,8 +407,51 @@ const init = () => {
     });
 
     // =====================================================================
+    // ================         Filtrage des formes        =================
+    // =====================================================================
+
+    // Filter 1 par présence ou non des cotes pour les formes
+    masqueSwitch.addEventListener('change', (event) => {
+        isShapeMasqueSwitchChecked = event.target.checked;
+        applyFilters();
+    });
+    
+    // Filtre 2 par domaine des formes
+    listEl2.addEventListener('click', ({ target }) => {
+        const li = target.closest('li');
+        if (!li) {
+            return;
+        }
+        const shape = li.querySelector('span').innerText.trim();
+        if (shape === currentShape) {
+            currentShape = null; // Réinitialiser currentShape à null
+            displayCurrentFilter(null);
+        } else {
+            currentShape = shape; // Mettre à jour currentShape avec la nouvelle forme sélectionnée
+        }
+        applyFilters();
+    });
+
+    // Filtre 3 par type d'equipement des forme
+    ListFiltre2.addEventListener('click', ({ target }) => {
+        if (target.tagName !== 'INPUT' || target.type !== 'checkbox') {
+            return;
+        }
+        checkedShapeTypes = Array.from(ListFiltre2.querySelectorAll('input[type="checkbox"]:checked'))
+            .map((input) => input.dataset.type);
+
+        applyFilters();
+    });
+
+    // =====================================================================
     // ==============      Filtre par date et affichage     ================
     // =====================================================================
+
+    
+    // Initialisation du filtre par date
+    document.getElementById('date-slider').addEventListener('input', () => {
+        applyFilters();
+    });
 
     // Affichage et paramétrage du fond de carte
     const dateDisplay = document.querySelectorAll('#dateDisplay, #dateDisplay2');
