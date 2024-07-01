@@ -16,7 +16,7 @@ const init = () => {
     });
 
     var cartho = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.carto.com">CARTO</a> OpenStreetMap, contributors RIDJALI',
+        attribution: '&copy; <a href="https://www.carto.com">CARTO</a> OpenStreetMap, contributors',
         opacity: 1
     });
     cartho.addTo(map);
@@ -236,14 +236,14 @@ const init = () => {
         let filteredShapes = Data.Formes.filter((shape) => {
             const passesShapeMasqueFilter = !isShapeMasqueSwitchChecked || shape.p_cotes;
             const passesShapeFilter = !currentShape || shape.domaine === currentShape;
-            const passesDomainFilter = !currentEquipment || shape.domaine === currentEquipment;
+            const passesDomainFilter = !currentShape || shape.domaine === currentShape;
             const passesShapeTypeFilter = checkedShapeTypes.length === 0 || checkedShapeTypes.includes(shape.type);
             const passesShapeDateFilter = new Date(shape.dateD_shape) <= dateCurseur && new Date(shape.dateF_shape) >= dateCurseur;
             return passesShapeMasqueFilter && passesShapeFilter && passesDomainFilter && passesShapeTypeFilter && passesShapeDateFilter ;
         });
 
-        currentFilteredEquipments = filteredEquipments;
-        currentFilteredShapes = filteredShapes;
+        filteredEquipments = filteredEquipments;
+        filteredShapes = filteredShapes;
         updateMap(filteredEquipments, filteredShapes);
         updateEquipmentList(filteredEquipments, filteredShapes); // Mettre à jour la liste d'équipements
 
@@ -286,7 +286,6 @@ const init = () => {
                     id_forme: shape.id_forme,
                     p_cotes : shape.p_cotes
                 }, map); // Ajouter les formes filtrées à la carte
-                Nb_equip++;
             }
         });
 
@@ -432,7 +431,7 @@ const init = () => {
         applyFilters();
     });
 
-    // Filtre 3 par type d'equipement des forme
+    // Filtre 3 par type d'equipement des formes
     ListFiltre2.addEventListener('click', ({ target }) => {
         if (target.tagName !== 'INPUT' || target.type !== 'checkbox') {
             return;
@@ -452,8 +451,6 @@ const init = () => {
     document.getElementById('date-slider').addEventListener('input', () => {
         applyFilters();
     });
-
-    // Affichage et paramétrage du fond de carte
     const dateDisplay = document.querySelectorAll('#dateDisplay, #dateDisplay2');
 
     function updateDateDisplay(date) {
@@ -471,7 +468,7 @@ const init = () => {
         applyFilters();
     }
 
-    // Ajoutez un gestionnaire d'événements pour les dates
+    // Boutton de lecture des dates
     startButton.addEventListener('click', () => {
         if (intervalId) {
             // Si l'intervalle est déjà en cours, arrêtez-le en cliquant à nouveau sur le bouton
@@ -493,12 +490,14 @@ const init = () => {
         }
     });
 
+    // Boutton date debut
     resetButton.addEventListener('click', () => {
         document.getElementById('date-slider').value = 1900; // Réinitialisez la valeur du curseur à 1900
         updateDateDisplay(1900); // Mettez à jour l'affichage de la date
         updateFilterAndDisplay(); // Mettre à jour le filtre
     });
 
+    // Boutton date actuelle
     fin.addEventListener('click', () => {
         document.getElementById('date-slider').value = 2023;
         updateDateDisplay(2023);
@@ -535,7 +534,7 @@ const init = () => {
         }
     });
 
-    // Ajouter l'écouteur d'événement pour afficher le popup des éléments de la sous-liste
+    // Ecouteur d'événement pour afficher le popup des éléments de la sous-liste
     listLoc.addEventListener('click', (event) => {
         const target = event.target.closest('.equip-item');
 

@@ -1,21 +1,36 @@
 
 
 // =====================================================================
-// ==============       Programmation des bouttons       ===============
+// ==========    Programmation des bouttons de navigation      =========
 // =====================================================================
+// function toggleDialog(dialogs, targetDialog, exceptions = []) {
+//     dialogs.forEach(dialog => {
+//         if (dialog === targetDialog) {
+//             if (dialog.getAttribute('open')) {
+//                 dialog.removeAttribute('open');
+//             } else {
+//                 dialog.setAttribute('open', true);
+//             }
+//         } else if (!exceptions.includes(dialog)) {
+//             dialog.removeAttribute('open');
+//         }
+//     });
+// }
+
 function toggleDialog(dialogs, targetDialog, exceptions = []) {
     dialogs.forEach(dialog => {
         if (dialog === targetDialog) {
-            if (dialog.getAttribute('open')) {
+            if (dialog && dialog.getAttribute('open')) {
                 dialog.removeAttribute('open');
             } else {
-                dialog.setAttribute('open', true);
+                dialog && dialog.setAttribute('open', true);
             }
         } else if (!exceptions.includes(dialog)) {
-            dialog.removeAttribute('open');
+            dialog && dialog.removeAttribute('open');
         }
     });
 }
+
 
 const dialogs = [
     document.getElementById('view-date'),
