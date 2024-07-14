@@ -4,22 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web_map</title>
+    <link rel="shortcut icon" href="assets/images/Logo archives.svg" type="image/x-icon">
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
-   
-    <link rel="stylesheet" href="style.css">
-
     
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+   
+    <link rel="stylesheet" href="css/style.css">
+ 
 </head>
 <body>
     <div class="container"> 
         <div class="header-section">
-            <img id="img-head" src="https://th.bing.com/th/id/R.72b0cd32c0c416287beea448539f90b1?rik=dUyXvf%2bFRByjIA&riu=http%3a%2f%2fwww.pa-sport.fr%2fwp-content%2fuploads%2fExpo-SPORTS-EN-JEU-au-Musee-dArt-et-dIndustrie-de-Saint-Etienne.png&ehk=YBphXI9VMhTnNThmUkrTEzCbLGIiITzS1uoZHKyFfP0%3d&risl=&pid=ImgRaw&r=0" alt="">
+            <img id="img-head" src="assets/images/Logo archives.svg" alt="">
             <h2>Carte des équipements sportifs</h2> 
 
         </div>
@@ -37,13 +41,12 @@
                 </div>
                 <!-- ========= Boutton nav ======= -->
                 <div class=" nav-bar">
-                    <button class="nav-button" id="date-switch"> <img src="docs/img/Temps.svg" alt="" > </button>
-                    <button class="nav-button" id="list-switch"> <img src="docs/img/Liste.svg" alt="" > </button>
-                    <button class="nav-button" id="filtre-switch"> <img src="docs/img/Filtre.svg" alt=""> </button>
-                    <button class="nav-button" id="legende-switch"> <a href="Edit/edition.html">L</a> </button>
+                    <button class="nav-button" id="date-switch"> <img src="assets/images/Temps.svg" alt="" > </button>
+                    <button class="nav-button" id="list-switch"> <img src="assets/images/Liste.svg" alt="" > </button>
+                    <button class="nav-button" id="filtre-switch"> <img src="assets/images/Filtre.svg" alt=""> </button>
                     <button class="nav-button" id="desc-switch"> D</button>
                     <button class="nav-button" id="fulldesc-switch"> D2</button>
-                    <button class="nav-button" id="apropos-switch"> <img src="docs/img/Apropos.svg" alt="" > </button>
+                    <button class="nav-button" id="apropos-switch"> <img src="assets/images/Apropos.svg" alt="" > </button>
                 </div>
                 <!-- ========== Date ========== -->
                 <script>
@@ -63,15 +66,15 @@
                         <input type="range" id="date-slider" min="1900" max="2023" value="2023" oninput="updateDateDisplay(this.value)">
                     </div>
                     <div open id="play-date" class="content-dialog"> 
-                        <img class="img_date" id="chrono" src="docs/img/Capture d'écran 2024-05-19 121237.png" alt="">
+                        <img class="img_date" id="chrono" src="assets/images/frise chronologique.svg" alt="">
                         <div id="bas_date">
                             <p id="date1">1900</p>
                             <div>
-                                <button id="resetButton"><<</button>
+                                <button id="resetButton" class="button-date" type="button"><< </button>
                                 <!-- <button id="recul"><</button> -->
-                                <button id="startButton">☐</button>
+                                <button id="startButton" class="button-date" type="button">☐</button>
                                 <!-- <button id="avance">></button> -->
-                                <button id="fin">>></button>
+                                <button id="fin" class="button-date" type="button"> >> </button>
                             </div>
                             <p id="date2">2024</p>
                         </div>
@@ -81,7 +84,7 @@
                 <!-- ========== liste ========= -->
                 <dialog id="view-list" class="body-dialog">
                     <div class="head-dialog">
-                        <button id="dev-list" class="dev-button">_</button>
+                        <!-- <button id="fix-list" class="dev-button">v</button> -->
                         <button id="close-list" class="close-button"> x</button>
                     </div>
                     <h2> Liste des équipements</h2>
@@ -113,6 +116,7 @@
                             <ul class="list" id="second-filtre" >
 
                             </ul>
+                            <button id="resetAll-Filtre">Reset</button>
                         </div>
                     </div>
                 </dialog>
@@ -144,9 +148,6 @@
                         <div id="fulldesc_rightbox">
                             <div id="image_full">
 
-                                <a id="lien_img1" href="" target="_blank">
-                                    <img class="img_full" id="id_img1" src="" alt="">
-                                </a>
                                 <a id="lien_img2" href="" target="_blank">
                                     <img class="img_full" id="id_img2" src="" alt="">
                                 </a>
@@ -156,6 +157,9 @@
                                 <a id="lien_img4" href="" target="_blank">
                                     <img class="img_full" id="id_img4" src="" alt="">
                                 </a>
+                                <a id="lien_img5" href="" target="_blank">
+                                    <img class="img_full" id="id_img5" src="" alt="">
+                                </a>
                             </div>
                             <div id="evenement">
                                 <h3> Evenement</h3>
@@ -163,20 +167,20 @@
                             </div>
                         </div>
 
-                        <div>
+                        <div id="head-full-desc">
+                            <a id="lien_img1" href="" target="_blank">
+                                <img id="id_img1" src="" alt="">
+                            </a>
                             <h2 id="titre"> Parc</h2>
                             <p id="addresse"> Adresse</p>
                         </div>
 
-                        <!-- ===== Partie description ===== -->
-                        <h3> Notice historique</h3>
-                        <div id="description"> Descriptif </div>
-                        <!-- ====== Partie Cotes ====== -->
-                        <h3>Docs des archives</h3>
-                        <div id="event2">
-                            
-                        </div>
-                        <div id="archive">
+                        <div id="body-desc">
+                            <!-- ===== Partie description ===== -->
+                            <h3> Notice historique</h3>
+                            <p id="description"> Descriptif </p>
+                            <!-- ====== Partie Cotes ====== -->
+                            <h3>A consulter aux Archives municipales</h3>
                             <h4>Document ecrit:</h4> 
                             <p id="docs_ecrit"> ecrit</p>
                             <h4>Document iconographique:</h4> 
@@ -187,20 +191,23 @@
                     </div>
                                
                 </dialog>
-                <!-- ====== Full description =========== -->
+                <!-- =========== Apropos =========== -->
                 <dialog id="view-apropos" class="body-dialog">
                     <div class="head-dialog">
                         <button id="close-apropos" class="close-button"> x</button>
                     </div>
                     <div class="content-dialog">
-                        <p>Cette carte a été réalisée dans le cadre d'un stage, ayant pour but la réalisation d'une cartographie interactive des équipements sportifs de la ville de Saint-Étienne.
+                        <p>Cette carte a été réalisée dans le cadre d'un stage, ayant pour but la réalisation d'une cartographie interactive des équipements sportifs de la ville de Saint-Étienne. <br><br>
 
-                            Dans ce cadre, je propose ici une carte réalisée de manière totalement open source, gratuite et personnalisable à souhait.
+                            Dans ce cadre, je propose ici une carte réalisée de manière totalement open source, gratuite et personnalisable à souhait.<br><br>
                             
-                            Je me suis basé sur du code HTML, CSS, JavaScript, des librairies Leaflet, et des tuiles de carte libres de droit telles qu'OpenStreetMap.
+                            Cette est basé sur du code HTML, CSS, JavaScript, des librairies Leaflet, et des tuiles de carte libres de droit telles qu'OpenStreetMap.<br><br>
+
+                            Ajouter des images 
                         </p>
                     </div>         
                 </dialog>
+
                 <div id="map"></div>
 
             </div>
@@ -210,14 +217,9 @@
 
     <!-- ===== Appelle des fichiers et des js ========= -->
    
-    <script src="docs/Complexe.js"></script>
-    <script src="docs/Equipement.js"></script>
-    <script src="docs/Cotes.js"></script>
-    <script src="docs/image.js"></script>
-    <script src="docs/fond_carte/Forme.js"></script>
-    <script src="docs/fond_carte/Fichier_export.js"></script>
+    <script src="docs/chargementDesDonnes.js"></script>
+    <script src="docs/fonctionExterne.js"></script>
     <script src="docs/fond_carte/Quartier.js"></script>
-    <script src="/index_data.js"></script>
     <script src="/index.js"></script>
     
     

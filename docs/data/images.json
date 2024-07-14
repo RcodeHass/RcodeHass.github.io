@@ -1,4 +1,6 @@
-const image = [
+[
+{"ID_IMG": "T15", "NUM": 1, "LIEN": "https://th.bing.com/th/id/OIP.LMncRhSESXiVqdeP22I_nQHaF2?rs=1&pid=ImgDetMain"},
+{"ID_IMG": "T55", "NUM": 1, "LIEN": "https://th.bing.com/th/id/OIP.LMncRhSESXiVqdeP22I_nQHaF2?rs=1&pid=ImgDetMain"},
 {"ID_IMG": "A02", "NUM": 3, "LIEN": "https://archives.saint-etienne.fr/_recherche-images/show/112914/image/38829/0"},
 {"ID_IMG": "C18", "NUM": 2, "LIEN": "https://archives.saint-etienne.fr/_recherche-images/show/112994/image/38913/0"},
 {"ID_IMG": "C08", "NUM": 2, "LIEN": "https://archives.saint-etienne.fr/_recherche-images/show/87423/image/14633/0"},
@@ -50,4 +52,4 @@ const image = [
 {"ID_IMG": "D10", "NUM": 2, "LIEN": "https://archives.saint-etienne.fr/_recherche-images/show/117951/image/45830/0"},
 {"ID_IMG": "C02", "NUM": 2, "LIEN": "https://archives.saint-etienne.fr/_recherche-images/show/118434/image/46313/0"},
 {"ID_IMG": "C02", "NUM": 1, "LIEN": "https://archives.saint-etienne.fr/_recherche-images/show/118454/image/46333/0"}
-];
+]

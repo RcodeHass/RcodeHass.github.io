@@ -1,19 +1,26 @@
-
-
-const init = () => {
+$(document).ready(function () {
 
     // =====================================================================
     // ==============       Initialisation de la carte     =================
     // =====================================================================
+    // const x = $('.close-button');
+    // closeAllWidows(x,dialogs);
+
+    let listLoc = document.querySelector('ul#list-equipement');
+    const frag = document.createDocumentFragment();
+    $('#play-date').get(0).style.display = 'block';
+
 
     // Les fond de carte 
 
     const centreloc = [45.43798463466298, 4.385923767089852];
     const map = L.map('map', {
+        zoomControl: false,
         center: centreloc,
         zoom: 12,
         scrollWheelZoom: true // Définir la zone restreinte
     });
+
 
     var cartho = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.carto.com">CARTO</a> OpenStreetMap, contributors',
@@ -67,33 +74,35 @@ const init = () => {
         markerGroup.addLayer(marker);
 
         marker.on('click', function () {
-            const ensemble = Data.Complexe.find(ens => ens.id === id);
-            const cotes_ecrit = Data.Cotes.find(cot => cot.id_cote === id && cot.types === 'D');
-            const cotes_icono = Data.Cotes.find(cot => cot.id_cote === id && cot.types === 'I');
-            const cotes_plan = Data.Cotes.find(cot => cot.id_cote === id && cot.types === 'P');
+            const ensemble = DataComplexe.find(ens => ens.id === id);
+            const cotes_ecrit = DataCotes.find(cot => cot.id_cote === id && cot.types === 'D');
+            const cotes_icono = DataCotes.find(cot => cot.id_cote === id && cot.types === 'I');
+            const cotes_plan = DataCotes.find(cot => cot.id_cote === id && cot.types === 'P');
             const descriptionText = ensemble ? ensemble.description : 'Non disponible';
 
-            const image_0 = Data.images.find(img => img.id_image === id && img.num === 1)
-            const image_1 = Data.images.find(img => img.id_image === id && img.num === 1)
-            const image_2 = Data.images.find(img => img.id_image === id && img.num === 2)
-            const image_3 = Data.images.find(img => img.id_image === id && img.num === 3)
-            const image_4 = Data.images.find(img => img.id_image === id && img.num === 4)
+            const image_0 = DataImages.find(img => img.id_image === id && img.num === 1)
+            const image_1 = DataImages.find(img => img.id_image === id && img.num === 1)
+            const image_2 = DataImages.find(img => img.id_image === id && img.num === 2)
+            const image_3 = DataImages.find(img => img.id_image === id && img.num === 3)
+            const image_4 = DataImages.find(img => img.id_image === id && img.num === 4)
+            const image_5 = DataImages.find(img => img.id_image === id && img.num === 5)
 
             document.getElementById('titre-description').innerHTML = ensemble ? ensemble.name : 'Non disponible';
-            document.getElementById('texte-description').innerHTML = truncateText(descriptionText, 150);
-            document.getElementById('description').innerHTML = ensemble ? ConversionSautLine(ensemble.description): 'Non disponible';
+            document.getElementById('texte-description').innerHTML = descriptionText? truncateText(descriptionText, 150):'Données indisponibles';
+            document.getElementById('description').innerHTML = ensemble ? (ensemble.description): 'Non disponible';
             document.getElementById('titre').innerHTML = ensemble ? ensemble.name :  'Non disponible';
             document.getElementById('addresse').innerHTML = ensemble ? ensemble.adresse :  'Non disponible';
-            document.getElementById('docs_event').innerHTML = ensemble ? ConversionSautLine (ensemble.event) :  'Non disponible';
-            document.getElementById('docs_ecrit').innerHTML = cotes_ecrit ? ConversionSautLine (cotes_ecrit.description_c): 'Non disponible';
-            document.getElementById('docs_icono').innerHTML = cotes_icono ? ConversionSautLine (cotes_icono.description_c): 'Non disponible';
-            document.getElementById('docs_plan').innerHTML = cotes_plan ? ConversionSautLine (cotes_plan.description_c): 'Non disponible';
+            document.getElementById('docs_event').innerHTML = ensemble ? (ensemble.event) :  'Non disponible';
+            document.getElementById('docs_ecrit').innerHTML = cotes_ecrit ? (cotes_ecrit.description_c): 'Non disponible';
+            document.getElementById('docs_icono').innerHTML = cotes_icono ? (cotes_icono.description_c): 'Non disponible';
+            document.getElementById('docs_plan').innerHTML = cotes_plan ? (cotes_plan.description_c): 'Non disponible';
 
             updateImage('id_img0', 'lien_img0', image_0);
             updateImage('id_img1', 'lien_img1', image_1);
             updateImage('id_img2', 'lien_img2', image_2);
             updateImage('id_img3', 'lien_img3', image_3);
             updateImage('id_img4', 'lien_img4', image_4);
+            updateImage('id_img5', 'lien_img5', image_5);
             
             // Vérifiez si fulldesc-switch est déjà ouvert
             const fullDescSwitch = document.getElementById('full-description');
@@ -106,13 +115,15 @@ const init = () => {
     };
 
     function updateImage(imgElementId, lienImgId, image) {
-    const imgElement = document.getElementById(imgElementId);
-    const lienImg = document.getElementById(lienImgId);
-    if (imgElement && lienImg) {
-        const imgUrl = image ? image.url : 'chemin/vers/image_non_disponible.png';
-        imgElement.src = imgUrl;
-        lienImg.href = imgUrl;
-        }
+        /*console.log('image');
+        console.log(image);*/
+        const imgElement = document.getElementById(imgElementId);
+        const lienImg = document.getElementById(lienImgId);
+        if (imgElement && lienImg) {
+            const imgUrl = image ? image.url : 'chemin/vers/image_non_disponible.png';
+            imgElement.src = imgUrl;
+            lienImg.href = imgUrl;
+            }
     }
 
     // Ajoute de la couche de Forme 
@@ -141,6 +152,11 @@ const init = () => {
     };
     L.control.layers(baseLayers, overlays,).addTo(map);
 
+    // Ajouter les contrôles de zoom par défaut
+    L.control.zoom({
+        position: 'topright'
+    }).addTo(map);
+
 
     // =====================================================================
     // =================         Création des list        ==================
@@ -149,8 +165,9 @@ const init = () => {
     // Liste Filtrage 1 par domaine
     let listEl2 = document.querySelector('ul#list-filtre');
     const frag2 = document.createDocumentFragment();
+
     const equipment = new Set();
-    Data.Equipements.forEach((equip1) => {
+    DataEquipements.forEach((equip1) => {
         if (!equipment.has(equip1.domaine)){
             const liEl2 = document.createElement('li');
             // Créer l'élément d'image
@@ -177,7 +194,7 @@ const init = () => {
     let ListFiltre2 = document.querySelector('ul#second-filtre')
     const frag3 = document.createDocumentFragment();
     const equipement = new Set();
-    Data.Equipements.forEach((equip) => {
+    DataEquipements.forEach((equip) => {
         if (!equipement.has(equip.type)){
             const liequip = document.createElement('li')
             const textEl = document.createElement('span');
@@ -225,7 +242,7 @@ const init = () => {
         const curseurValeur = document.getElementById('date-slider').value;
         const dateCurseur = new Date(curseurValeur);
 
-        let filteredEquipments = Data.Equipements.filter((equip) => {
+        let filteredEquipments = DataEquipements.filter((equip) => {
             const passesEquipmentFilter = !currentEquipment || equip.domaine === currentEquipment;
             const passesTypeFilter = checkedTypes.length === 0 || checkedTypes.includes(equip.type);
             const passesDateFilter = new Date(equip.dateD) <= dateCurseur && new Date(equip.dateF) >= dateCurseur;
@@ -233,7 +250,7 @@ const init = () => {
             return passesEquipmentFilter && passesTypeFilter && passesDateFilter && passesMasqueFilter;
         });
 
-        let filteredShapes = Data.Formes.filter((shape) => {
+        let filteredShapes = DataFormes.filter((shape) => {
             const passesShapeMasqueFilter = !isShapeMasqueSwitchChecked || shape.p_cotes;
             const passesShapeFilter = !currentShape || shape.domaine === currentShape;
             const passesDomainFilter = !currentShape || shape.domaine === currentShape;
@@ -324,7 +341,7 @@ const init = () => {
     
         const frag = document.createDocumentFragment();
     
-        Data.Complexe.forEach((loca) => {
+        DataComplexe.forEach((loca) => {
             const relevantEquipments = ensembleEquipements[loca.id]?.filter(equip => filteredEquipments.includes(equip)) || [];
             
             if (relevantEquipments.length > 0) {
@@ -508,6 +525,31 @@ const init = () => {
     // let currentFilteredEquipments = Data.Equipements;
     applyFilters();
 
+    // Sélectionner le bouton de réinitialisation
+    const resetFiltersButton = document.getElementById('resetAll-Filtre');
+
+    resetFiltersButton.addEventListener('click', () => {
+        // Réinitialiser les filtres
+        isMasqueSwitchChecked = false;
+        isShapeMasqueSwitchChecked = false;
+        currentEquipment = null;
+        currentShape = null;
+        checkedTypes = [];
+        checkedShapeTypes = [];
+        curseurValeur = 2023; // ou toute autre valeur par défaut
+        document.getElementById('date-slider').value = curseurValeur; // Mettre à jour le curseur
+
+        // Réinitialiser l'affichage de l'interface utilisateur
+        document.getElementById('masque-switch').checked = false;
+        updateDateDisplay(curseurValeur);
+        document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+            checkbox.checked = false;
+        });
+
+        // Réappliquer les filtres avec les valeurs réinitialisées
+        applyFilters();
+    });
+
     // =====================================================================
     // ======    Gestion des événements sur la liste d'équipement    =======
     // =====================================================================
@@ -552,10 +594,4 @@ const init = () => {
         }
     });
 
-    
-    
-};
-
-
-
-window.onload = init;
+});
