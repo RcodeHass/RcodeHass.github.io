@@ -507,7 +507,7 @@ input:checked + .slider:before {
 /* ========== full description ========== */
 #full-description{
     position: absolute;
-    height: 90%;
+    height: 88%;
     width: 80%;
     margin-top: 70px;
     padding-bottom: 50px;
@@ -666,13 +666,12 @@ input:checked + .slider:before {
         width: 90%;
     }
 
-    #view-filtre{
-        width: 35vh;
+    /* #view-filtre{
+        width: 28vh;
         top: 15%;
-        height: calc(100% - 20%);
-
+        height: calc(100% - 50%);
         margin-left: calc(0vh + 8vh);
-    }
+    } */
     
     
     #view-couche{
@@ -700,7 +699,7 @@ input:checked + .slider:before {
 
     #full-description{
         position: absolute;
-        height: 98%;
+        height: 88%;
         width: 85%;
         margin-top: 60px;
     
@@ -710,6 +709,15 @@ input:checked + .slider:before {
         position: relative;
         /* width: 50%; */
         margin-top: 25%;
+    }
+
+    #view-apropos{
+        position: absolute;
+        height: 90%;
+        width: 50%;
+        margin-top: 60px;
+        margin-right: 5px;
+        
     }
 }
 /* ========== Tout ce qui se qui part de 0 a les pixel max d'un telephone ========== */

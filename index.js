@@ -97,7 +97,7 @@ $(document).ready(function () {
             document.getElementById('docs_icono').innerHTML = cotes_icono ? (cotes_icono.description_c): 'Non disponible';
             document.getElementById('docs_plan').innerHTML = cotes_plan ? (cotes_plan.description_c): 'Non disponible';
 
-            updateImage('id_img0', 'lien_img0', image_0);
+            updateImageAppercu('id_img0', 'lien_img0', image_0);
             updateImage('id_img1', 'lien_img1', image_1);
             updateImage('id_img2', 'lien_img2', image_2);
             updateImage('id_img3', 'lien_img3', image_3);
@@ -120,10 +120,22 @@ $(document).ready(function () {
         const imgElement = document.getElementById(imgElementId);
         const lienImg = document.getElementById(lienImgId);
         if (imgElement && lienImg) {
-            const imgUrl = image ? image.url : 'chemin/vers/image_non_disponible.png';
+            const imgUrl = image ? image.url : '';
             imgElement.src = imgUrl;
             lienImg.href = imgUrl;
             }
+    }
+
+    function updateImageAppercu(imgElementId, lienImgId, image) {
+        const imgElement = document.getElementById(imgElementId);
+        const lienImg = document.getElementById(lienImgId);
+        const img_modal = document.getElementById('id_img0_modal');
+        if (imgElement && lienImg) {
+            const imgUrl = image ? image.url : 'assets/images/no-image-found.svg';
+            imgElement.src = imgUrl;
+            lienImg.href = imgUrl;
+
+        }
     }
 
     // Ajoute de la couche de Forme 
@@ -319,16 +331,16 @@ $(document).ready(function () {
     // Mettre à jour l'affichage du nombre de marqueurs
     function updateMarkerCount(count) {
         const markerCountDisplay = document.getElementById('Nb_equip');
-        markerCountDisplay.innerText = `Nombre de marqueurs: ${count}`;
+        markerCountDisplay.innerText = `Nombre d'équipements: ${count}`;
     }
 
     // Fonction pour afficher le filtre actuel
     function displayCurrentFilter(filteredDomains) {
         const filterDisplay = document.getElementById('Filtre-actu');
         if (filteredDomains) {
-            filterDisplay.innerHTML = `Filtre actuel: ${filteredDomains}`;
+            filterDisplay.innerHTML = filteredDomains;
         } else {
-            filterDisplay.innerHTML = 'Filtre actuel: Aucun';
+            filterDisplay.innerHTML = 'Aucun';
         }
     }
 
@@ -389,13 +401,13 @@ $(document).ready(function () {
         listLoc.appendChild(frag);
     }
 
-    // Filter 1 par présence ou non des cotes
+    // Filter 1: par la présence ou non des cotes
     masqueSwitch.addEventListener('change', (event) => {
         isMasqueSwitchChecked = event.target.checked;
         applyFilters();
     });
 
-    // Filtre 2 par domaine
+    // Filtre 2: par l'attribut domaine
     listEl2.addEventListener('click', ({ target }) => {
         const li = target.closest('li');
         if (!li) {
@@ -411,7 +423,7 @@ $(document).ready(function () {
         applyFilters();
     });
 
-    // Filtre 3 par type d'equipement
+    // Filtre 3 par l'attribut type d'equipement
     ListFiltre2.addEventListener('click', ({ target }) => {
         if (target.tagName !== 'INPUT' || target.type !== 'checkbox') {
             return;
@@ -471,7 +483,7 @@ $(document).ready(function () {
     const dateDisplay = document.querySelectorAll('#dateDisplay, #dateDisplay2');
 
     function updateDateDisplay(date) {
-        dateDisplay.forEach(display => display.innerText = date);
+        dateDisplay.forEach(display => display.innerText = `Date actuelle: ${date}`);
     }
     updateDateDisplay(curseurValeur);
 

@@ -65,17 +65,17 @@ $('#dev-date').get(0).addEventListener('click', function() {
 
 // Fermer toutes les fenêtres
 
-function closeAllWidows(collectionButton,tabButton) {
-    Array.from(collectionButton).forEach(button => {
-        button.addEventListener('click', () => {
-            tabButton.forEach(dialog => {
-                if (dialog) {
-                    dialog.removeAttribute('open');
-                }
-            });
-        });
-    })
-}
+// function closeAllWidows(collectionButton,tabButton) {
+//     Array.from(collectionButton).forEach(button => {
+//         button.addEventListener('click', () => {
+//             tabButton.forEach(dialog => {
+//                 if (dialog) {
+//                     dialog.removeAttribute('open');
+//                 }
+//             });
+//         });
+//     })
+// }
 
 
 // Afficher la nav bar en mode smartphone 
@@ -97,10 +97,23 @@ function updateNbEquipDisplay(count) {
     }
 }
 
-// ============== Controler la longeur des texte des description ================
+// ============== Controler la longeur des texte des description et ouverture de la description  ================
+// const truncateText = (text, limit) => {
+//     if (text.length > limit) {
+//         return text.substring(0, limit) + '... lire la suite';
+//     }
+//     return text;
+// };
+
+function onpenDevDescription(){
+    var dlg = document.getElementById('full-description');
+    dlg.setAttribute('open', true);
+
+}
+
 const truncateText = (text, limit) => {
     if (text.length > limit) {
-        return text.substring(0, limit) + '... lire la suite';
+        return text.substring(0, limit) + '...'+'<a href="javascript:void(0);" onclick="onpenDevDescription();" >lire la suite....</a>';
     }
     return text;
 };

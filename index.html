@@ -15,9 +15,10 @@
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-   
     <link rel="stylesheet" href="css/style.css">
+    <!-- <link href="lib\bootstrap-5.1.3\css\bootstrap.min.css" rel="stylesheet"> -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
  
 </head>
 <body>
@@ -31,7 +32,9 @@
 
             <div class="info">
                 <p id="dateDisplay" class="Display-date">Curseur temporelle</p>
-                <p id="Filtre-actu">Filtre actuelle </p>
+                <p>||</p>
+                <p id="Filtre-actu">Filtre actuelle</p>
+                <p>||</p>
                 <p id="Nb_equip"> Nombre d'equipement</p>
             </div>
 
@@ -44,8 +47,8 @@
                     <button class="nav-button" id="date-switch"> <img src="assets/images/Temps.svg" alt="" > </button>
                     <button class="nav-button" id="list-switch"> <img src="assets/images/Liste.svg" alt="" > </button>
                     <button class="nav-button" id="filtre-switch"> <img src="assets/images/Filtre.svg" alt=""> </button>
-                    <button class="nav-button" id="desc-switch"> D</button>
-                    <button class="nav-button" id="fulldesc-switch"> D2</button>
+                    <button class="nav-button" id="desc-switch"> D</button> <!--Boutton masquer -->
+                    <button class="nav-button" id="fulldesc-switch"> D2</button> <!--Boutton masquer -->
                     <button class="nav-button" id="apropos-switch"> <img src="assets/images/Apropos.svg" alt="" > </button>
                 </div>
                 <!-- ========== Date ========== -->
@@ -216,15 +219,24 @@
     </div>
 
     <!-- ===== Appelle des fichiers et des js ========= -->
-   
+    <script src="lib\bootstrap-5.1.3\js\bootstrap.bundle.min.js"></script>
     <script src="docs/chargementDesDonnes.js"></script>
     <script src="docs/fonctionExterne.js"></script>
     <script src="docs/fond_carte/Quartier.js"></script>
     <script src="/index.js"></script>
     
-    
- 
-    
-    
 </body>
+<!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <img class="img_desc_modal" id="id_img0_modal" src="" alt="">
+        </div>
+        </div>
+    </div>
+    </div> -->
 </html>
