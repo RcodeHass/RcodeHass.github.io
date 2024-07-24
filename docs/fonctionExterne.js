@@ -113,7 +113,7 @@ function onpenDevDescription(){
 
 const truncateText = (text, limit) => {
     if (text.length > limit) {
-        return text.substring(0, limit) + '...'+'<a href="javascript:void(0);" onclick="onpenDevDescription();" >lire la suite....</a>';
+        return text.substring(0, limit) + '...'+'<a href="javascript:void(0);" onclick="onpenDevDescription();" >   lire la suite....</a>';
     }
     return text;
 };

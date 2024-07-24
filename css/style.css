@@ -56,12 +56,11 @@ p {
 .nav-bar {
     width: 4vh;
     padding: 2px;
-    padding-top: 25vh;
+    margin-top: 25vh;
     padding-left: 1%;
     float: left;
-    z-index: 1; 
     position: absolute;
-    z-index: 9999;
+    z-index: 9950;
     display: block;
     
 }
@@ -75,7 +74,7 @@ p {
     width: 4vh;
     margin-left: 3%;
     margin-top: 10%;
-    z-index: 9999;
+    z-index: 9995;
     color: rgba(255, 255, 255, 0.76);
     background-color: rgba(101, 168, 23);
     align-items: center;
@@ -115,6 +114,15 @@ p {
     height: 100%; 
     width: 100%;
     border-radius: 5px;
+}
+
+.leaflet-bottom.leaflet-left .leaflet-control {
+    margin-bottom: 50px !important;
+    margin-top: -20px !important; 
+    z-index: 9999;
+}
+.leaflet-control {
+    pointer-events: auto;
 }
 
 #desc-switch {
@@ -195,6 +203,7 @@ p {
     position: relative;
     padding: 5px;
     overflow-x: hidden;
+    padding-bottom: 80px;
 }
 
 
@@ -213,15 +222,18 @@ li:hover{
     opacity: 0.8;
 }
 
+
+
 .info {
     color: rgb(249, 252, 249);
     position: absolute;
     gap: 5px;
     display: flex;
     top: 10px;
-    margin-left: 6%;
-    z-index: 9999;
-    padding: 5px;
+    right: 10px; /* Ajoutez cette ligne pour aligner la div à droite */
+    z-index: 9996;
+    padding-left: 5px;
+    padding-right: 5px;
     background: rgba(143, 176, 236, 0.582);
     padding-top: 0;
     border-radius: 5px;
@@ -235,16 +247,17 @@ li:hover{
 
 #view-list{
     width: 35vh;
-    top: 5%;
+    top: 8%;
     height: calc(100% - 11%);
-    margin-right: 5px;
+    margin-right: 1%;
     padding: 0px;
+    padding-bottom: 4%;
 }
 
 #view-list h2 {
     margin-left: 10px;
     margin-top: 0;
-    margin-bottom: 1px;
+    margin-bottom: 2px;
 }
 
 #liste-content {
@@ -373,6 +386,10 @@ li:hover{
 
 #titre-description{
     margin-top: 0px;
+}
+
+#texte-description {
+    margin-right: 40px;
 }
 
 
@@ -734,6 +751,15 @@ input:checked + .slider:before {
     
     }
 
+    .header-section h2{
+        z-index: 9999;
+        font-size: 4vw;
+        width: 70%;
+        margin-left: 15%;
+        position: absolute;
+        top: 2px;
+    }
+
     p{
         font-size: 2.5vw;
     }
@@ -761,18 +787,20 @@ input:checked + .slider:before {
         color: rgb(249, 252, 249);
         position: absolute;
         gap: 5px;
-        display: flex;
+        display: inline-flex;
+        align-items: center;
         height: 5vh;
+        width: 90%;
         top: 10px;
         z-index: 9999;
         background: rgba(143, 176, 236, 0.582);
         padding-top: 0;
         border-radius: 5px;
     }
+
     .info p {
-        size: 100%;
+        font-size: 3vw;
     }
-    
 
     #view-list{
         position: absolute;
@@ -832,28 +860,6 @@ input:checked + .slider:before {
     }
     
 
-    .info {
-        color: rgb(249, 252, 249);
-        position: absolute;
-        gap: 5px;
-        display: flex;
-        /* height: 5vh; */
-        width: 75%;
-        top: 10px;
-        z-index: 9999;
-        background: rgba(143, 176, 236, 0.582);
-        padding-top: 0;
-        border-radius: 5px;
-        padding: 5px; 
-        margin-left: 5px;
-    }
-    
-    .info p {
-        font-size: 1.8vh; 
-        margin: 0;
-    }
-    
-
     #view-apropos p {
         font-size: 12px;
     }
@@ -887,7 +893,6 @@ input:checked + .slider:before {
     .nav-bar {
         width: 5vh;
         padding: 2px;
-        padding-top: 18vh;
         padding-left: 2%;
         float: left;
         z-index: 1; 
@@ -905,7 +910,7 @@ input:checked + .slider:before {
         width: 4vh;
         height: 4vh;
         margin-left: 2%;
-        margin-top: 15vh;
+        margin-top: 22vh;
         z-index: 9999;
         color: rgba(255, 255, 255, 0.76);
         background-color: rgba(101, 168, 23);

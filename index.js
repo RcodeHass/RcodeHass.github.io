@@ -43,20 +43,27 @@ $(document).ready(function () {
     const shapeGroup = L.layerGroup().addTo(map);
     const quartierGroup = L.layerGroup();
 
-    // Ajouter la couche quartier 
-    const Quartier = L.geoJSON(quartier, {
-        onEachFeature: function(feature, layer) {
-            layer.bindPopup(feature.properties.code_2018.toString());
-        },
-        style: {
-            fillOpacity: 0.09,
-            opacity: 0.8,
-            weight: 1,
-            dashArray: '4, 10',
-            color: '#FFD133'
-        }
-    });
-    quartierGroup.addLayer(Quartier);
+    // // Ajouter la couche quartier 
+     fetch('docs/fond_carte/Quartier.geojson')
+     .then(response => response.json())
+     .then(data => {
+         const Quartier = L.geoJSON(data, {
+             onEachFeature: function(feature, layer) {
+                 layer.bindPopup(feature.properties.code_2018.toString());
+             },
+             style: {
+                 fillOpacity: 0.09,
+                 opacity: 0.8,
+                 weight: 1,
+                 dashArray: '4, 10',
+                 color: '#FFD133'
+             }
+         });
+         quartierGroup.addLayer(Quartier);
+     })
+     .catch(error => {
+         console.error('Erreur lors du chargement du fichier GeoJSON:', error);
+     });
     
     // ======= Ajout de la couche de Point =========
     const addMarkerToMap = ({ latitude, longitude, pratique, domaine, id}, map) => {
@@ -160,13 +167,17 @@ $(document).ready(function () {
     var overlays = {
         "Marker": markerGroup,
         "Forme": shapeGroup,
-        "Quartier": quartierGroup
+        "Quartier": quartierGroup,
     };
-    L.control.layers(baseLayers, overlays,).addTo(map);
+    L.control.layers(baseLayers, overlays, { position: 'bottomleft' }).addTo(map);
+
+    // L.control.layers(null, overlays, {
+    //     position: 'topleft' // Déplacer l'overview en haut à gauche
+    // }).addTo(map);
 
     // Ajouter les contrôles de zoom par défaut
     L.control.zoom({
-        position: 'topright'
+        position: 'bottomleft'
     }).addTo(map);
 
 
@@ -483,7 +494,7 @@ $(document).ready(function () {
     const dateDisplay = document.querySelectorAll('#dateDisplay, #dateDisplay2');
 
     function updateDateDisplay(date) {
-        dateDisplay.forEach(display => display.innerText = `Date actuelle: ${date}`);
+        dateDisplay.forEach(display => display.innerText = `Date: ${date}`);
     }
     updateDateDisplay(curseurValeur);
 

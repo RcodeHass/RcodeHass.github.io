@@ -162,10 +162,10 @@ const ensembleEquipements = DataEquipements.reduce((acc, equip) => {
 
 // Définir un objet de correspondance pour les icônes
 const iconMapping = {
-    "Sport en plein air": "assets/images/Exterieur.svg",
-    "Jeux de boule": "assets/images/Boule.svg",
-    "Sport aquatique": "assets/images/Piscine.svg",
-    "Equipement couvert": "assets/images/Gymnase.svg",
+    "Sports en plein air": "assets/images/Exterieur.svg",
+    "Jeux de boules": "assets/images/Boule.svg",
+    "Sports aquatiques": "assets/images/Piscine.svg",
+    "Equipements couverts": "assets/images/Gymnase.svg",
     "Divers": "assets/images/Divers.svg"
 };
 

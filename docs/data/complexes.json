@@ -1,50 +1,5 @@
 ﻿[
 {
-"ID": "T15",
-"NOM": "Test",
-"ADRESSE": "",
-"EVENEMENT": "",
-"DESCRIPTION": "",
-"lon_X": 4.329515000000000,
-"lat_Y": 45.430067000000000
-},
-{
-"ID": "T55",
-"NOM": "dddddddddddvv",
-"ADRESSE": "vfffffffffvfko",
-"EVENEMENT": "",
-"DESCRIPTION": "",
-"lon_X": 4.300804000000000,
-"lat_Y": 45.463743000000000
-},
-{
-"ID": "T56",
-"NOM": "fdf",
-"ADRESSE": "fvf",
-"EVENEMENT": "fv",
-"DESCRIPTION": "fvf",
-"lon_X": 23887655.000000000000000,
-"lat_Y": 178.900000000000000
-},
-{
-"ID": "T22",
-"NOM": "TEESTE  f",
-"ADRESSE": "fdfb",
-"EVENEMENT": "fdbdf",
-"DESCRIPTION": "fbfbdfbfd",
-"lon_X": 123.200000000000000,
-"lat_Y": 45480114.000000000000000
-},
-{
-"ID": "T25",
-"NOM": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
-"ADRESSE": "fdnd",
-"EVENEMENT": "nfdn",
-"DESCRIPTION": "dnfnfd",
-"lon_X": 4.369125000000000,
-"lat_Y": 45.430262000000000
-},
-{
 "ID": "A01",
 "NOM": "Parc de Méons",
 "ADRESSE": "41, 42 rue de la Talaudière",
