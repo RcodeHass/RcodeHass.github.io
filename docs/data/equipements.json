@@ -1,5 +1,41 @@
 ﻿[
 {
+"ID_EQUIP": "T05",
+"NUM_EQUIP": "346",
+"PRATIQUE": "Tennis",
+"DOMAINE": "Sports en plein air",
+"TYPE_EQUIP": "Court de tennis",
+"DATE_INNAU": "04/01/2004 00:08:00",
+"DATE_DEM": "07/30/2024 00:08:00",
+"lon_X": 4.412212000000000,
+"lat_Y": 45.450497000000000,
+"P_COTES": true
+},
+{
+"ID_EQUIP": "T02",
+"NUM_EQUIP": "345",
+"PRATIQUE": "Test",
+"DOMAINE": "Equipements couverts",
+"TYPE_EQUIP": "Salle de gymnastique sportive",
+"DATE_INNAU": "07/26/1994 00:00:00",
+"DATE_DEM": "07/26/2024 00:00:00",
+"lon_X": 4.382775000000000,
+"lat_Y": 45.443605000000000,
+"P_COTES": false
+},
+{
+"ID_EQUIP": "T01",
+"NUM_EQUIP": "344",
+"PRATIQUE": "EQUIPE_Teste",
+"DOMAINE": "Sports aquatiques",
+"TYPE_EQUIP": "Terrain de basket-ball",
+"DATE_INNAU": "01/01/2000 00:08:00",
+"DATE_DEM": "01/01/2024 00:08:00",
+"lon_X": 4.345951000000000,
+"lat_Y": 45.432913000000000,
+"P_COTES": false
+},
+{
 "ID_EQUIP": "A01",
 "NUM_EQUIP": "251",
 "PRATIQUE": "Terrain de football F7",

@@ -15,7 +15,7 @@
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
     
-    <link rel="stylesheet" href="css/style.css">
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
     <link rel="stylesheet" href="css/style.min.css">
     <!-- <link href="lib\bootstrap-5.1.3\css\bootstrap.min.css" rel="stylesheet"> -->
 
@@ -74,11 +74,11 @@
                         <div id="bas_date">
                             <p id="date1">1900</p>
                             <div>
-                                <button id="resetButton" class="button-date" type="button"> << </button>
+                                <button id="resetButton" class="button-date" type="button"> <img src="assets/images/Reculer.svg" width="16" height="12" fill="currentColor" viewBox="0 0 16 16" alt=""> </button>
                                 <!-- <button id="recul"><</button> -->
                                 <button id="startButton" class="button-date" type="button">☐</button>
                                 <!-- <button id="avance">></button> -->
-                                <button id="fin" class="button-date" type="button"> >> </button>
+                                <button id="fin" class="button-date" type="button"> <img src="assets/images/Avancer.svg" width="16" height="12" fill="currentColor" viewBox="0 0 16 16" alt=""> </button>
                             </div>
                             <p id="date2">2024</p>
                         </div>
@@ -196,6 +196,9 @@
                                
                 </dialog>
                 <!-- =========== Apropos =========== -->
+                <!-- <div id="fond-apropos" > 
+                    <p>teste</p>
+                </div>
                 <dialog id="view-apropos" class="body-dialog">
                     <div class="head-dialog">
                         <button id="close-apropos" class="close-button"> x</button>
@@ -205,13 +208,40 @@
 
                             Dans ce cadre, je propose ici une carte réalisée de manière totalement open source, gratuite et personnalisable à souhait.<br><br>
                             
-                            Cette est basé sur du code HTML, CSS, JavaScript, des librairies Leaflet, et des tuiles de carte libres de droit telles qu'OpenStreetMap.<br><br>
+                            Cette carte est basé sur du code HTML, CSS, JavaScript, des librairies Leaflet, et des tuiles de carte libres de droit telles qu'OpenStreetMap.<br><br>
 
                             Ajouter des images 
                         </p>
+                        <div class="apropos-img">
+                            <img class="ap-img" src="assets/images/Logo archives.svg" alt="">
+                            <img class="ap-img" src="assets/images/Logo_EVS.png" alt="">
+                            <img class="ap-img" src="assets/images/Logo_ART.png" alt="">
+                        </div>
                     </div>         
-                </dialog>
+                </dialog> -->
+                <dialog id="view-apropos"> 
+                    <div id="content-apropos" class="body-dialog">
+                        <div class="head-dialog">
+                            <button id="close-apropos" class="close-button"> x</button>
+                        </div>
+                        <div class="content-dialog">
+                            <p>Les archives municipales de Saint-Étienne, dirigées par Pierre-Régis Dupuy, portent en cette année olympique, un projet de valorisation des équipements sportifs, passés et présents, de la ville. Basé sur les fonds d'archives qu'elles conservent et en partenariat avec le Laboratoire Environnement Ville Société (EVS - UMR 5600 CNRS) représenté par Pierre-Olivier Mazagol de l'Université Jean Monnet - Saint-Étienne, ce projet vise à développer une cartographie web de l'histoire des équipements sportifs de la ville. <br> <br>
 
+                                Ce projet est financé par l'Institut ARTS (Arts, Recherche, Territoires, Savoirs), une initiative de l'Université Jean Monnet de Saint-Étienne visant à promouvoir une dynamique de recherche et de formation autour des arts. Grâce à la bourse SFRI Graduate+, un étudiant en Master 1 GéoNum a pu réaliser un stage de cinq mois aux archives municipales, où il a proposé des solutions techniques pour cartographier les équipements tout en valorisant les documents d'archives. <br> <br>
+                                
+                                La carte présentée ici découle de la volonté de proposer une solution entièrement open source, gratuite et personnalisable, basée sur du code HTML, CSS, JavaScript, les librairies Leaflet, et des tuiles de carte libres de droit telles qu'OpenStreetMap.
+                                
+                                Les acteurs de ce projet ont à cœur de mettre en avant la culture, le patrimoine et les technologies des systèmes d'information géographique (SIG) durant les Jeux Olympiques de Paris et l'épreuve que la ville de Saint-Étienne accueillera.
+                            </p>
+                            <div class="apropos-img">
+                                <img class="ap-img" src="assets/images/Logo archives.svg" alt="">
+                                <img class="ap-img" src="assets/images/Logo_EVS.png" alt="">
+                                <img class="ap-img" src="assets/images/Logo_ART.png" alt="">
+                            </div>
+                        </div>         
+                    </div>
+                </dialog>
+                
                 <div id="map"></div>
 
             </div>
@@ -222,12 +252,13 @@
     <!-- ===== Appelle des fichiers et des js ========= -->
     <!-- <script src="lib\bootstrap-5.1.3\js\bootstrap.bundle.min.js"></script> -->
     <!-- <script src="docs/chargementDesDonnes.js"></script>
-    <script src="docs/fonctionExterne.js"></script> -->
-    <!-- <script src="/index.js"></script> -->
+    <script src="docs/fonctionExterne.js"></script>
+    <script src="/index.js"></script> -->
 
+    <!-- Code Minifier -->
     <script src="docs/chargementDesDonnes.min.js"></script>
-    <script src="docs/fonctionExterne.min.js"></script>
-    <script src="/index.min.js"></script>
+    <script src="docs/fonctionExterne.min.js"></script> 
+    <script src="/index.min.js"></script> 
     
 </body>
 <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

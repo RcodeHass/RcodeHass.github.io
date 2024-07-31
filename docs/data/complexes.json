@@ -1,5 +1,32 @@
 ﻿[
 {
+"ID": "T05",
+"NOM": "Terrain de tennis",
+"ADRESSE": "23 RUE",
+"EVENEMENT": "",
+"DESCRIPTION": "",
+"lon_X": 4.412212000000000,
+"lat_Y": 45.450497000000000
+},
+{
+"ID": "T02",
+"NOM": "Gymnase ",
+"ADRESSE": "",
+"EVENEMENT": "",
+"DESCRIPTION": "teste ",
+"lon_X": 4.382775000000000,
+"lat_Y": 45.443605000000000
+},
+{
+"ID": "T01",
+"NOM": "Equipement_Teste ",
+"ADRESSE": "",
+"EVENEMENT": "",
+"DESCRIPTION": "Equipement qui fait office de teste, a supprimer a la fin de la période de devellopement ",
+"lon_X": 4.345436000000000,
+"lat_Y": 45.432672000000000
+},
+{
 "ID": "A01",
 "NOM": "Parc de Méons",
 "ADRESSE": "41, 42 rue de la Talaudière",

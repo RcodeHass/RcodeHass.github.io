@@ -260,6 +260,22 @@ $(document).ready(function () {
     let checkedShapeTypes = [];
     let curseurValeur = document.getElementById('date-slider').value;
 
+    // Fonction pour parser les dates au format "jour/mois/année"
+    function parseDate(dateStr) {
+        if (typeof dateStr === 'string') {
+            const parts = dateStr.split(' ')[0].split('/'); // Extraire uniquement la partie date
+            return new Date(parts[2], parts[1] - 1, parts[0]); // année, mois (0-indexé), jour
+        } else if (dateStr instanceof Date) {
+            return dateStr; // Si c'est déjà un objet Date, le retourner tel quel
+        } else {
+            console.error('Invalid date format:', dateStr);
+            return new Date(); // retourner une date par défaut en cas d'erreur
+        }
+    }
+
+
+
+
     // Fonction de filtrage globale avec ajout de marqueurs à la carte
     function applyFilters() {
         const curseurValeur = document.getElementById('date-slider').value;
@@ -268,7 +284,7 @@ $(document).ready(function () {
         let filteredEquipments = DataEquipements.filter((equip) => {
             const passesEquipmentFilter = !currentEquipment || equip.domaine === currentEquipment;
             const passesTypeFilter = checkedTypes.length === 0 || checkedTypes.includes(equip.type);
-            const passesDateFilter = new Date(equip.dateD) <= dateCurseur && new Date(equip.dateF) >= dateCurseur;
+            const passesDateFilter = parseDate(equip.dateD) <= dateCurseur && parseDate(equip.dateF) >= dateCurseur;
             const passesMasqueFilter = !isMasqueSwitchChecked || equip.p_cotes;
             return passesEquipmentFilter && passesTypeFilter && passesDateFilter && passesMasqueFilter;
         });
@@ -278,7 +294,7 @@ $(document).ready(function () {
             const passesShapeFilter = !currentShape || shape.domaine === currentShape;
             const passesDomainFilter = !currentShape || shape.domaine === currentShape;
             const passesShapeTypeFilter = checkedShapeTypes.length === 0 || checkedShapeTypes.includes(shape.type);
-            const passesShapeDateFilter = new Date(shape.dateD_shape) <= dateCurseur && new Date(shape.dateF_shape) >= dateCurseur;
+            const passesShapeDateFilter = parseDate(shape.dateD_shape) <= dateCurseur && parseDate(shape.dateF_shape) >= dateCurseur;
             return passesShapeMasqueFilter && passesShapeFilter && passesDomainFilter && passesShapeTypeFilter && passesShapeDateFilter ;
         });
 
@@ -382,7 +398,7 @@ $(document).ready(function () {
                     const liEquip = document.createElement('li');
                     liEquip.classList.add('equip-item');
     
-                    // Créer l'élément d'image
+                    // Créer l'élément d'image (icônes)
                     const imgEl = document.createElement('img');
                     imgEl.src = getIconUrl(equip.domaine); // Utilisation de la fonction getIconUrl
                     imgEl.alt = equip.pratique;
@@ -513,7 +529,7 @@ $(document).ready(function () {
         if (intervalId) {
             // Si l'intervalle est déjà en cours, arrêtez-le en cliquant à nouveau sur le bouton
             clearInterval(intervalId);
-            startButton.textContent = '☐'; // Changez le texte du bouton pour "Start"
+            startButton.textContent = '☐'; // "Start"
             intervalId = null; // Réinitialisez l'identifiant de l'intervalle
         } else {
             intervalId = setInterval(() => {
@@ -526,7 +542,7 @@ $(document).ready(function () {
                 document.getElementById('date-slider').value = newValue;
                 updateFilterAndDisplay();
             }, 200);
-            startButton.textContent = 'Stop'; // Changez le texte du bouton pour "Stop"
+            startButton.textContent = 'Stop'; //  "Stop"
         }
     });
 

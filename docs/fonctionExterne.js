@@ -63,6 +63,17 @@ $('#dev-date').get(0).addEventListener('click', function() {
     }
 });
 
+const closeAproposButton = document.getElementById('close-apropos');
+
+closeAproposButton.addEventListener('click', () => {
+    console.log('Bouton de fermeture "close-apropos" cliqué');
+    dialogs.forEach(dialog => {
+        if (dialog) {
+            dialog.removeAttribute('open');
+        }
+    });
+});
+
 // Fermer toutes les fenêtres
 
 // function closeAllWidows(collectionButton,tabButton) {
