@@ -1,30 +1,12 @@
 ﻿[
 {
-"ID": "T05",
-"NOM": "Terrain de tennis",
-"ADRESSE": "23 RUE",
+"ID": "T02",
+"NOM": "TESTE",
+"ADRESSE": "",
 "EVENEMENT": "",
 "DESCRIPTION": "",
-"lon_X": 4.412212000000000,
-"lat_Y": 45.450497000000000
-},
-{
-"ID": "T02",
-"NOM": "Gymnase ",
-"ADRESSE": "",
-"EVENEMENT": "",
-"DESCRIPTION": "teste ",
-"lon_X": 4.382775000000000,
-"lat_Y": 45.443605000000000
-},
-{
-"ID": "T01",
-"NOM": "Equipement_Teste ",
-"ADRESSE": "",
-"EVENEMENT": "",
-"DESCRIPTION": "Equipement qui fait office de teste, a supprimer a la fin de la période de devellopement ",
-"lon_X": 4.345436000000000,
-"lat_Y": 45.432672000000000
+"lon_X": 4.120000000000000,
+"lat_Y": 45.100000000000000
 },
 {
 "ID": "A01",
@@ -597,7 +579,7 @@
 "ID": "C18",
 "NOM": "Vélodrome d'hiver",
 "ADRESSE": "rue Denis Papin",
-"EVENEMENT": "1er juin 1925 : inauguration du Vélodrome dhiver de Saint-Etienne.<br><br>Décembre 1934 : vente par la société du Vélodrome à la Ville du complee sportif, aménagements, remise en état de la toiture, de la piste, de léclairage, du chauffage.<br><br>1936 : installation de trois courts de tennis.<br><br>1945-1948 : travau de réparations après les dégâts causés par le bombardement.<br><br>1959 : inauguration dun stand de tir.<br><br>1961 : le Vélodrome est détruit et la municipalité décide de construire un nouveau Palais des sports à la Plaine Achille.<br><br>2003 : rénovation dune partie du site pour lUniversité.",
+"EVENEMENT": "1er juin 1925 : inauguration du Vélodrome d'hiver de Saint-Etienne.<br><br>Décembre 1934 : vente par la société du Vélodrome à la Ville du complee sportif, aménagements, remise en état de la toiture, de la piste, de léclairage, du chauffage.<br><br>1936 : installation de trois courts de tennis.<br><br>1945-1948 : travaux de réparations après les dégâts causés par le bombardement.<br><br>1959 : inauguration d'un stand de tir.<br><br>1961 : le Vélodrome est détruit et la municipalité décide de construire un nouveau Palais des sports à la Plaine Achille.<br><br>2003 : rénovation d'une partie du site pour l'Université.",
 "DESCRIPTION": "Le Vélodrome dhiver est construit sur linitiative dun industriel stéphanois souhaitant voir se développer les ateliers de construction de cycles.<br><br>Le projet est accepté en 1923.<br><br>En 1925 le bâtiment est destiné au compétitions cyclistes mais la société anonyme qui dirige le Vélodrome est mise en liquidation en 1934 et vend le bâtiment à la Ville qui en élargit le champ dusage progressivement.<br><br>Le \"Vél dhiv\" devient un Palais des sports abritant des compétitions de catch, de boules, de tennis et de basket.<br><br>Lentrée principale se trouve dans la rue Denis Papin.<br><br>Les spectacles qui se déroulent au Vélodrome sont très populaires et attirent les foules. Mais les bâtiments sont construits légèrement et rapidement dimportantes réparations sont à faire.<br><br>La verrière menace de tomber en ruines. Le bâtiment ne répond pas au normes de sécurité et épuise le budget.<br><br>La Ville décide donc de démolir le bâtiment dont lemplacement est occupé ensuite par une usine dappareils de mesures électriques jusquen 1991.<br><br>LUniversité y installe un amphithéâtre en 1995 et rénove une autre partie du site pour ouvrir en 2003 le Service universitaire de formation continue et le Centre international de langue et de civilisation.",
 "lon_X": 4.387884399008510,
 "lat_Y": 45.426910477664700
