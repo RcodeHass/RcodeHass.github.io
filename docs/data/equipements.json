@@ -1,17 +1,5 @@
 ﻿[
 {
-"ID_EQUIP": "T02",
-"NUM_EQUIP": "344",
-"PRATIQUE": "",
-"DOMAINE": "Equipements couverts",
-"TYPE_EQUIP": "Terrain de volley-ball",
-"DATE_INNAU": "07/31/2013 00:08:00",
-"DATE_DEM": "01/01/2024 00:08:00",
-"lon_X": 4.120000000000000,
-"lat_Y": 45.200000000000000,
-"P_COTES": false
-},
-{
 "ID_EQUIP": "A01",
 "NUM_EQUIP": "251",
 "PRATIQUE": "Terrain de football F7",

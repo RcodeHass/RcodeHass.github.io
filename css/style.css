@@ -231,7 +231,7 @@ li:hover{
     display: flex;
     top: 10px;
     right: 10px; /* Ajoutez cette ligne pour aligner la div à droite */
-    z-index: 9996;
+    z-index: 996;
     padding-left: 5px;
     padding-right: 5px;
     background: rgba(143, 176, 236, 0.582);
@@ -649,10 +649,11 @@ input:checked + .slider:before {
 
 .apropos-img {
     display: grid;
-    position: absolute;
+    /* position: absolute; */
     grid-template-columns: repeat(3, 1fr);
     gap: 2px;
     bottom: 10px;
+    
 }
 
 .ap-img {
@@ -682,7 +683,7 @@ input:checked + .slider:before {
         display: flex;
         top: 10px;
         margin-left: 70px;
-        z-index: 9999;
+        z-index: 996;
         padding: 5px;
         background: rgba(143, 176, 236, 0.582);
         padding-top: 0;
@@ -692,7 +693,9 @@ input:checked + .slider:before {
     .info p {
         font-size: 80%;
     }
-
+    .nav-bar {
+        margin-top: 10%;
+    }
     .switch {
         position: relative;
         width: 15%;
@@ -717,12 +720,13 @@ input:checked + .slider:before {
         width: 90%;
     }
 
-    /* #view-filtre{
-        width: 28vh;
+    #view-filtre{
+        width: 35vh;
         top: 15%;
-        height: calc(100% - 50%);
-        margin-left: calc(0vh + 8vh);
-    } */
+        height: calc(100% - 20%);
+        margin-left: calc(0vh + 15vh);
+        overflow-y: scroll;
+    }
     
     
     #view-couche{
@@ -935,6 +939,7 @@ input:checked + .slider:before {
         position: absolute;
         z-index: 9998;
         display: none;
+        margin-top: 25vh;
         
     }
 

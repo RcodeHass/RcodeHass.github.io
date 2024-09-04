@@ -1,14 +1,5 @@
 ﻿[
 {
-"ID": "T02",
-"NOM": "TESTE",
-"ADRESSE": "",
-"EVENEMENT": "",
-"DESCRIPTION": "",
-"lon_X": 4.120000000000000,
-"lat_Y": 45.100000000000000
-},
-{
 "ID": "A01",
 "NOM": "Parc de Méons",
 "ADRESSE": "41, 42 rue de la Talaudière",
